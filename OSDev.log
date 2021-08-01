@@ -33,41 +33,41 @@
 00000000000i[      ]   Sound support: no
 00000000000i[      ]   USB support: UHCI
 00000000000i[      ]   VGA extension support: vbe cirrus
-00000000000i[MEM0  ] allocated memory at 0x10a063000. after alignment, vector=0x10a063000
+00000000000i[MEM0  ] allocated memory at 0x10be3b000. after alignment, vector=0x10be3b000
 00000000000i[MEM0  ] 32.00MB
 00000000000i[MEM0  ] mem block size = 0x00020000, blocks=256
 00000000000i[MEM0  ] rom at 0xfffe0000/131072 ('/usr/local/share/bochs/BIOS-bochs-latest')
-00000000000i[      ] lt_dlhandle is 0x7f9fadf2e210
+00000000000i[      ] lt_dlhandle is 0x7fde9f013830
 00000000000i[PLUGIN] loaded plugin libbx_hdimage.so
-00000000000i[      ] lt_dlhandle is 0x7f9fadf2e2e0
+00000000000i[      ] lt_dlhandle is 0x7fde7de15540
 00000000000i[PLUGIN] loaded plugin libbx_pci.so
-00000000000i[      ] lt_dlhandle is 0x7f9fadf2ecb0
+00000000000i[      ] lt_dlhandle is 0x7fde7de15ae0
 00000000000i[PLUGIN] loaded plugin libbx_pci2isa.so
-00000000000i[      ] lt_dlhandle is 0x7f9fadf2f380
+00000000000i[      ] lt_dlhandle is 0x7fde7de161b0
 00000000000i[PLUGIN] loaded plugin libbx_usb_uhci.so
-00000000000i[      ] lt_dlhandle is 0x7f9fadf31210
+00000000000i[      ] lt_dlhandle is 0x7fde7de18040
 00000000000i[PLUGIN] loaded plugin libbx_acpi.so
-00000000000i[      ] lt_dlhandle is 0x7f9fadf316e0
+00000000000i[      ] lt_dlhandle is 0x7fde7de18510
 00000000000i[PLUGIN] loaded plugin libbx_hpet.so
-00000000000i[      ] lt_dlhandle is 0x7f9fadf31f10
+00000000000i[      ] lt_dlhandle is 0x7fde7de18d40
 00000000000i[PLUGIN] loaded plugin libbx_cmos.so
-00000000000i[      ] lt_dlhandle is 0x7f9fadc318e0
+00000000000i[      ] lt_dlhandle is 0x7fde7de191a0
 00000000000i[PLUGIN] loaded plugin libbx_dma.so
-00000000000i[      ] lt_dlhandle is 0x7f9fadf32550
+00000000000i[      ] lt_dlhandle is 0x7fde7de19710
 00000000000i[PLUGIN] loaded plugin libbx_pic.so
-00000000000i[      ] lt_dlhandle is 0x7f9fadf32620
+00000000000i[      ] lt_dlhandle is 0x7fde7de19ca0
 00000000000i[PLUGIN] loaded plugin libbx_pit.so
-00000000000i[      ] lt_dlhandle is 0x7f9fadf32f00
+00000000000i[      ] lt_dlhandle is 0x7fde7de1a190
 00000000000i[PLUGIN] loaded plugin libbx_vga.so
-00000000000i[      ] lt_dlhandle is 0x7f9fadf33230
+00000000000i[      ] lt_dlhandle is 0x7fde7de1a4c0
 00000000000i[PLUGIN] loaded plugin libbx_floppy.so
-00000000000i[      ] lt_dlhandle is 0x7f9fadf33920
+00000000000i[      ] lt_dlhandle is 0x7fde7de1aba0
 00000000000i[PLUGIN] loaded plugin libbx_ioapic.so
-00000000000i[      ] lt_dlhandle is 0x7f9fadf33d50
+00000000000i[      ] lt_dlhandle is 0x7fde9f096890
 00000000000i[PLUGIN] loaded plugin libbx_keyboard.so
-00000000000i[      ] lt_dlhandle is 0x7f9fadf33e40
+00000000000i[      ] lt_dlhandle is 0x7fde9f096aa0
 00000000000i[PLUGIN] loaded plugin libbx_harddrv.so
-00000000000i[      ] lt_dlhandle is 0x7f9fadf34b30
+00000000000i[      ] lt_dlhandle is 0x7fde9f097630
 00000000000i[PLUGIN] loaded plugin libbx_pci_ide.so
 00000000000i[PLUGIN] init_dev of 'pci' plugin device by virtual method
 00000000000i[DEV   ] i440FX PMC present at device 0, function 0
@@ -75,7 +75,7 @@
 00000000000i[DEV   ] PIIX3 PCI-to-ISA bridge present at device 1, function 0
 00000000000i[PLUGIN] init_dev of 'cmos' plugin device by virtual method
 00000000000i[CMOS  ] Using local time for initial clock
-00000000000i[CMOS  ] Setting initial clock to: Wed Jul 28 22:17:18 2021 (time0=1627535838)
+00000000000i[CMOS  ] Setting initial clock to: Sat Jul 31 18:17:22 2021 (time0=1627780642)
 00000000000i[PLUGIN] init_dev of 'dma' plugin device by virtual method
 00000000000i[DMA   ] channel 4 used by cascade
 00000000000i[PLUGIN] init_dev of 'pic' plugin device by virtual method
@@ -4061,123 +4061,23 @@
 00138827624e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
 00138860423e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
 00138893199e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00138925975e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00138958751e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00138991527e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139024303e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139057079e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139089878e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139122654e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139155430e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139188206e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139220982e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139253758e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139286534e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139319333e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139352109e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139384885e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139417661e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139450437e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139483213e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139516012e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139548788e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139581564e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139614340e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139647116e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139679892e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139712668e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139745467e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139778243e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139811019e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139843795e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139876571e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139909347e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139942123e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00139974922e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140007698e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140040474e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140073250e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140106026e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140138802e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140171578e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140204377e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140237153e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140269929e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140302705e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140335481e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140368257e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140401056e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140433832e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140466608e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140499384e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140532160e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140564936e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140597712e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140630511e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140663287e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140696063e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140728839e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140761615e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140794391e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140827167e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140859966e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140892742e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140925518e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140958294e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00140991070e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141023846e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141056645e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141089421e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141122197e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141154973e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141187749e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141220525e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141253301e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141286100e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141318876e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141351652e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141384428e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141417204e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141449980e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141482756e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141515555e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141548331e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141581107e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141613883e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141646659e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141679435e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141712211e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141745010e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141777786e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141810562e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141843338e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141876114e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141908890e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141941689e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00141974465e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00142007241e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00142040017e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00142072793e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00142105569e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00142138345e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00142171144e[CPU0  ] prefetch: EIP [00010000] > CS.limit [0000ffff]
-00142180000p[SDL2  ] >>PANIC<< User requested shutdown.
-00142180000i[CPU0  ] CPU is in real mode (active)
-00142180000i[CPU0  ] CS.mode = 16 bit
-00142180000i[CPU0  ] SS.mode = 16 bit
-00142180000i[CPU0  ] EFER   = 0x00000000
-00142180000i[CPU0  ] | EAX=00000001  EBX=00000000  ECX=00090102  EDX=00000000
-00142180000i[CPU0  ] | ESP=0000ffff  EBP=00000000  ESI=000e00c6  EDI=0000ffac
-00142180000i[CPU0  ] | IOPL=0 id vip vif ac vm rf nt of df IF tf SF zf AF PF cf
-00142180000i[CPU0  ] | SEG sltr(index|ti|rpl)     base    limit G D
-00142180000i[CPU0  ] |  CS:1000( 0004| 0|  0) 00010000 0000ffff 0 0
-00142180000i[CPU0  ] |  DS:07c0( 0005| 0|  0) 00007c00 0000ffff 0 0
-00142180000i[CPU0  ] |  SS:0000( 0005| 0|  0) 00000000 0000ffff 0 0
-00142180000i[CPU0  ] |  ES:1000( 0005| 0|  0) 00010000 0000ffff 0 0
-00142180000i[CPU0  ] |  FS:07c0( 0005| 0|  0) 00007c00 0000ffff 0 0
-00142180000i[CPU0  ] |  GS:07c0( 0005| 0|  0) 00007c00 0000ffff 0 0
-00142180000i[CPU0  ] | EIP=00004520 (00004520)
-00142180000i[CPU0  ] | CR0=0x60000010 CR2=0x00000000
-00142180000i[CPU0  ] | CR3=0x00000000 CR4=0x00000000
-00142180000i[CMOS  ] Last time is 1627535873 (Wed Jul 28 22:17:53 2021)
-00142180000i[SIM   ] quit_sim called with exit code 1
+00138912000p[SDL2  ] >>PANIC<< User requested shutdown.
+00138912000i[CPU0  ] CPU is in real mode (active)
+00138912000i[CPU0  ] CS.mode = 16 bit
+00138912000i[CPU0  ] SS.mode = 16 bit
+00138912000i[CPU0  ] EFER   = 0x00000000
+00138912000i[CPU0  ] | EAX=00000001  EBX=00000000  ECX=00090102  EDX=00000000
+00138912000i[CPU0  ] | ESP=0000ffff  EBP=00000000  ESI=000e00c6  EDI=0000ffac
+00138912000i[CPU0  ] | IOPL=0 id vip vif ac vm rf nt of df IF tf sf zf af PF cf
+00138912000i[CPU0  ] | SEG sltr(index|ti|rpl)     base    limit G D
+00138912000i[CPU0  ] |  CS:1000( 0004| 0|  0) 00010000 0000ffff 0 0
+00138912000i[CPU0  ] |  DS:07c0( 0005| 0|  0) 00007c00 0000ffff 0 0
+00138912000i[CPU0  ] |  SS:0000( 0005| 0|  0) 00000000 0000ffff 0 0
+00138912000i[CPU0  ] |  ES:1000( 0005| 0|  0) 00010000 0000ffff 0 0
+00138912000i[CPU0  ] |  FS:07c0( 0005| 0|  0) 00007c00 0000ffff 0 0
+00138912000i[CPU0  ] |  GS:07c0( 0005| 0|  0) 00007c00 0000ffff 0 0
+00138912000i[CPU0  ] | EIP=000092d2 (000092d2)
+00138912000i[CPU0  ] | CR0=0x60000010 CR2=0x00000000
+00138912000i[CPU0  ] | CR3=0x00000000 CR4=0x00000000
+00138912000i[CMOS  ] Last time is 1627780676 (Sat Jul 31 18:17:56 2021)
+00138912000i[SIM   ] quit_sim called with exit code 1

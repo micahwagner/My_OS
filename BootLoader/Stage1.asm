@@ -105,7 +105,9 @@ LOAD_ROOT:
 	mul 	WORD [bpbSectorsPerFAT]			; multiply by sectors per fat
 	add     ax, WORD [bpbReservedSectors]	; account for reserved sectors
 	mov     WORD [datasector], ax       	; base of root directory
-    add     WORD [datasector], cx 			; add with size to get data region
+    add     WORD [datasector], cx 			; add with size end of root for data region
+
+
 
 
 
