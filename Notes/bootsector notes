@@ -39,7 +39,7 @@ lets say we have 3h,41m,26s (a CHS of 3,41,26). lets try and convert this to sec
 now we add all these values to get the amount of seconds in 3hours, 41mins, 26secs. 
 10,800 + 2,460 + 26 = 13,286 seconds (this is our LBA)
 
-converting 13,286 seconds (our LBA) to HMS (CHS)
+converting 13,286 seconds (our LBA) back to HMS (CHS)
 
 to get the amount of seconds (3hours, 41mins, 26secs <--this) from 13,286 seconds, all we need to do is 13,286 mod 60. this is the same raparound logic as the mod 10 examples I showed above.
 
