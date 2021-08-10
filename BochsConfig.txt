@@ -4,7 +4,7 @@ romimage:    file=/usr/local/share/bochs/BIOS-bochs-latest
 vgaromimage: file=/usr/local/share/bochs/VGABIOS-lgpl-latest 
  
 # boot from floppy using our disk image -------------------------------
-floppya: 1_44=disks/a.img, status=inserted  # Boot from drive A
+floppya: 1_44=disks/a.dmg, status=inserted  # Boot from drive A
  
 # logging and reporting -----------------------------------------------
  
