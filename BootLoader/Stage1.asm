@@ -153,30 +153,60 @@ main:
 ;Load root directory table
 ;=======================================
 
-LOAD_ROOT:
-	
-	; calculate size of root directory and store in cx
+LoadRoot:
+		; calculate size of root directory and store in cx
 
-	xor 	dx, dx
-	xor		cx, cx
-	mov		ax, 0x0020						; use the value 32 to multiplay with the amount of root entries
-	mul 	WORD [bpbRootEntries]			; because each root entry is 32 bytes long
-	div 	WORD [bpbBytesPerSector]		; devide by bytes per sector so we get how many sectors the root directory is
-	xchg    ax, cx                      	; exchange values of ax with cs
+		xor 	dx, dx
+		xor		cx, cx
+		mov		ax, 0x0020						; use the value 32 to multiplay with the amount of root entries
+		mul 	WORD [bpbRootEntries]			; because each root entry is 32 bytes long
+		div 	WORD [bpbBytesPerSector]		; devide by bytes per sector so we get how many sectors the root directory is
+		xchg    ax, cx                      	; exchange values of ax with cs
 
-	; compute starting location of root and store in ax
+		; compute starting location of root and store in ax
 
-	mov		al, BYTE [bpbNumberOfFATs] 		; get number of fats
-	mul 	WORD [bpbSectorsPerFAT]			; multiply by sectors per fat
-	add     ax, WORD [bpbReservedSectors]	; account for reserved sectors
-	mov     WORD [datasector], ax       	; base of root directory
-    add     WORD [datasector], cx 			; add with size end of root for data region
+		mov		al, BYTE [bpbNumberOfFATs] 		; get number of fats
+		mul 	WORD [bpbSectorsPerFAT]			; multiply by sectors per fat
+		add     ax, WORD [bpbReservedSectors]	; account for reserved sectors
+		mov     WORD [datasector], ax       	; base of root directory
+    	add     WORD [datasector], cx 			; add with size end of root for data region
 
-    mov 	bx, 0x0200
-    call 	LoadSectors	
+    	mov 	bx, 0x0200
+    	call 	LoadSectors	
 
-    cli
-    hlt
+;=======================================
+;Find stage2 root entry
+;browse root entry for binary image
+;=======================================
+
+
+		mov 	cx, WORD [bpbRootEntries] 	; counter
+		mov 	di, 0x0200 					; location where root resides
+	RootLoop:
+		push 	cx
+		push 	di 							; push di because it gets incremented from rep cmpsb 
+		mov 	cx, 0x000B 					; Character name is 11 bytes 
+		mov 	si, ImageName 				; name to find
+	rep cmpsb 								; compare DS:SI and ES:DI by subtraction. rep repeats cmpsb cx times (11)
+		je 		LoadFat 					; if equal, jump to load fat
+		pop 	di
+		pop 	cx
+		add 	di, 0x0020 					; add 32 bytes for next entry
+		loop 	RootLoop 					; decs cx reg and checks for 0, if 0, execute next line
+		jmp 	Failure
+
+;=======================================
+;load fat 
+;=======================================
+
+LoadFat:
+	cli
+	hlt
+Failure:
+	cli
+	hlt
+
+    	
 
 
 .Reset:
@@ -209,6 +239,7 @@ LOAD_ROOT:
 	absoluteCylinder	db 0x00
 
 	datasector  dw 0x0000
+	ImageName   db "STAGE2  SYS"
 
 	msgLoading  db 0x0D, 0x0A, "Loading Boot Image ", 0x0D, 0x0A, 0x00	
 	msgProgress db ".", 0x00						
