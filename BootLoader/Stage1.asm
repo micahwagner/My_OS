@@ -77,7 +77,7 @@ LoadSectors:
 		xor 	ax, ax 						; set ah to 0 to Reset Disk System
 		int 	0x13 						; Execute bios int
 		dec 	di 							; decrement error counter
-		pop		cx 							; pop original params for LBACHS
+		pop 	cx 							; pop original params for LBACHS
 		pop 	bx
 		pop 	ax
 		jnz     LoadSectorLoop 				; if the error counter isnt 0, try loading again
@@ -164,7 +164,7 @@ Main:
 
     ;Display loading message
 
-	mov		si, msgLoading					; our message to print
+	mov 	si, msgLoading					; our message to print
 	call	Print							; call our print function
 
 ;=======================================
@@ -175,15 +175,15 @@ LoadRoot:
 		; calculate size of root directory and store in cx
 
 		xor 	cx, cx
-		xor		dx, dx
-		mov		ax, 0x0020						; use the value 32 to multiplay with the amount of root entries
+		xor 	dx, dx
+		mov 	ax, 0x0020						; use the value 32 to multiplay with the amount of root entries
 		mul 	WORD [bpbRootEntries]			; because each root entry is 32 bytes long
 		div 	WORD [bpbBytesPerSector]		; devide by bytes per sector so we get how many sectors the root directory is
 		xchg 	ax, cx                      	; exchange values of ax with cs
 
 		; compute starting location of root and store in ax
 
-		mov		al, BYTE [bpbNumberOfFATs] 		; get number of fats
+		mov 	al, BYTE [bpbNumberOfFATs] 		; get number of fats
 		mul 	WORD [bpbSectorsPerFAT]			; multiply by sectors per fat
 		add 	ax, WORD [bpbReservedSectors]	; account for reserved sectors
 		mov 	WORD [datasector], ax       	; base of root directory
