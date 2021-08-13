@@ -114,7 +114,7 @@ ClusterLBA:
 	ret
 
 ;=======================================
-;LBACHS conversion
+;LBA to CHS conversion
 ;AX = LBA
 ;Cylinder = LBA / (SPT * HPC)
 ;Head = (LBA / SPT ) mod HPC
@@ -258,8 +258,6 @@ LoadStage2:
 		xor     cx, cx
 		mov     cl, BYTE [bpbSectorsPerCluster]     ; sectors to read
 		call    LoadSectors
-		mov 	si, 0x0500
-		call 	Print
 		push    bx
 
 	; calculate next cluster
@@ -274,7 +272,7 @@ LoadStage2:
 		mov 	dx, ax
 		shr 	dx, 0x0001 							 
 		add 	cx, dx								
-		mov 	bx, 0x0200 							
+		mov 	bx, 0x0200							
 
 
 		add 	bx, cx 						; index into FAT
@@ -303,7 +301,7 @@ LoadStage2:
 		call    Print
 		push    WORD 0x0050
 		push    WORD 0x0000
-		retf
+		retf 								; jump to execute Stage2
 
 	Failure:
 		mov     si, msgFailure
