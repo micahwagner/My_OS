@@ -64,5 +64,9 @@ LBA	=	(cluster - 2 ) * sectors per cluster
 this equation i think is referring to the fact that the first 2 entries in the FAT are reserved. cluster is equal to the cluster we want to read data (in data region). 
 
 
+10011011 10110011 10011011 10110011	10011011 10110011 10011011 10110011	
+|     0     ||     1     | |     2     ||     3     | |     4     |
+
+the reason we devide the cluster by 2, then add it with itself is because if we get say cluster 4, we dont load the fourth byte. instead we start loading from the (4/2 = 2, 2+4=6) 6th byte. this is essentially the same as multiplying by 3/2, which is the fat entry to byte ratio (12/8 = 3/2). since each FAT entry is 3/2 or 1.5 times bigger than a byte, all we got to do is multiply the cluster num by 1.5 to access the byte we start refrencing from.
 
 

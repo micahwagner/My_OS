@@ -13,7 +13,7 @@ org 0x0										; offset to 0, we will set segments later
 bits 16										; we are still in real mode
  
 	; we are loaded at linear address 0x10000
- 
+	
 jmp 	main								; jump to main
  
 ;*************************************************;
