@@ -83,7 +83,7 @@ LoadSectors:
 		jnz     LoadSectorLoop 				; if the error counter isnt 0, try loading again
 		int 	0x18 						; if error counter is 0, then display error
 	Success:
-		mov		si, msgProgress
+		mov 	si, msgProgress
 		call 	Print
 		pop 	cx 							; pop to change values for next LoadSectorLoop call
 		pop 	bx
