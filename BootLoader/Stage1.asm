@@ -293,7 +293,7 @@ LoadStage2:
 
 		mov 	WORD [cluster], dx
 		cmp 	dx, 0x0FF0
-		jb 		LoadStage2
+		jb  	LoadStage2
 
  	DONE:
      
