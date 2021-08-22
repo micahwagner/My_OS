@@ -63,10 +63,57 @@ LBA	=	(cluster - 2 ) * sectors per cluster
 
 this equation i think is referring to the fact that the first 2 entries in the FAT are reserved. cluster is equal to the cluster we want to read data (in data region). 
 
+;*************************************
+;FAT ENTRYS stuff
+;*************************************
+
 
 10011011 10110011 10011011 10110011	10011011 10110011 10011011 10110011	
 |     0     ||     1     | |     2     ||     3     | |     4     |
 
 the reason we devide the cluster by 2, then add it with itself is because if we get say cluster 4, we dont load the fourth byte. instead we start loading from the (4/2 = 2, 2+4=6) 6th byte. this is essentially the same as multiplying by 3/2, which is the fat entry to byte ratio (12/8 = 3/2). since each FAT entry is 3/2 or 1.5 times bigger than a byte, all we got to do is multiply the cluster num by 1.5 to access the byte we start refrencing from.
+
+;*************************************
+;GDT
+;*************************************
+
+We are not yet in full protected mode! Section 10.3 of the INTEL
+80386 PROGRAMMER'S REFERENCE MANUAL 1986 states:
+
+Immediately after setting the PE flag, the initialization code must flush
+the processor's instruction prefetch queue by executing a JMP instruction.
+The 80386 fetches and decodes instructions and addresses before they are
+used; however, after a change into protected mode, the prefetched
+instruction information (which pertains to real-address mode) is no longer
+valid. A JMP forces the processor to discard the invalid information.
+
+It isn't really necessary to do the JMP right away, as this implies.
+It simply means that protected mode doesn't "kick in" until the segment
+registers are reloaded. Above, we set the ES segment register to 0xB800.
+This is the real-mode segment of the text video memory. With the PE bit
+still set, let's copy a message from the real-mode data segment (DS) to
+the video memory (ES).
+
+
+The code above won't work in protected mode. It's there just to
+prove that setting the PE bit is not enough to enter protected mode.
+
+Now do a far jump. This reloads the CS register and flushes the
+real-mode instructions from the prefetch queue. CS is the segment
+register used for instruction fetches, so this is where the switch
+from 16-bit instructions (real-mode) to 32-bit instructions
+(protected-mode) takes place.
+
+But what goes into CS? In real mode, we use the segment address. In
+protected mode, we use a SELECTOR:
+
+MSB  b14  b13  b12  b11  b10   b9   b8   b7   b6   b5   b4   b3   b2   b1   LSB
+;+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+
+;|                                index                           | L  |   RPL   |
+;+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+
+
+index is a 13-bit index into the GDT. It selects one of the possible 8192
+descriptors in the table. (Note: 8192 descriptors/table, 8 bytes/descriptor.
+The GDT is no larger than 64K.)
 
 

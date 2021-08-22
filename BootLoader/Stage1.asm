@@ -41,14 +41,16 @@ bsFileSystem: 	        DB "FAT12   "
 ;=======================================
 
 Print:
-
+		pusha
+	PLoop:	
 		lodsb								; load next byte from string from SI to AL
 		or 		al, al 						; does AL = 0?
 		jz		PrintDone					; Yep, null terminator found, bail out
 		mov 	ah, 0eh						; No, print Character
 		int 	10h 						
-		jmp 	Print 						; repeat until null terminator found
+		jmp 	PLoop 						; repeat until null terminator found
 	PrintDone:
+		popa
 		ret 								; we are done, so return
 
 ;=======================================
@@ -326,7 +328,7 @@ LoadStage2:
 	msgProgress db ".", 0x00
 	msgCRLF     db 0x0D, 0x0A, 0x00		
 	msgFailure  db 0x0D, 0x0A, "ERROR : Press Any Key to Reboot", 0x0A, 0x00
-	msgTest  db 0x0D, 0x0A, "TEST", 0x0A, 0x00
+	msgTest  db 0x0D, 0x0A, "0", 0x0A, 0x00
 				
 
 times 510 - ($-$$) db 0						; we have to be 512 bytes. add the rest of the bytes to be 0
