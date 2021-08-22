@@ -74,8 +74,71 @@ this equation i think is referring to the fact that the first 2 entries in the F
 the reason we devide the cluster by 2, then add it with itself is because if we get say cluster 4, we dont load the fourth byte. instead we start loading from the (4/2 = 2, 2+4=6) 6th byte. this is essentially the same as multiplying by 3/2, which is the fat entry to byte ratio (12/8 = 3/2). since each FAT entry is 3/2 or 1.5 times bigger than a byte, all we got to do is multiply the cluster num by 1.5 to access the byte we start refrencing from.
 
 ;*************************************
-;GDT
+;GDT (global descriptor table) and Pmode stuff
 ;*************************************
+
+the GDT is a table with 8 byte entrys, that describe a section of memory.
+The GDT starts with null descriptor, which is just an empt set of 8 bytes. 
+Following the null descriptor, is the code descriptor and the Data descriptor.
+I will explain what thes terms mean and the general structure of the GDT.
+
+there are several pictures that give a good summary on the basic structure, so I will
+link the images below.
+
+good pics of the GDT:
+http://ece-research.unm.edu/jimp/310/slides/micro_arch2-2.gif
+https://wiki.osdev.org/images/f/f3/GDT_Entry.png
+
+this is what each entry in the GDT would look like.
+the Limit section (bits 0 - 15, and the last 3 bits 16 - 19) is describing 
+how big this section of memory can be. the base section (bits 0-15, 16-23, and 24-31)
+represents the base address of this section of memory. notice how different
+parts of the base address and limit value are located in different areas of the entry? 
+this is just a standard, and its just how intel wants it to be organized.
+
+Now onto the Access rights. the access rights is just one byte, and all
+it does is describe what kind of rights this segment of code has. for 
+example, it can describe the segment as readabl or writable, whether it is
+to executed as code or interpreted as data, ect. the first bit describes whether it uses
+virtual memory not. the second bit describes whether its read only, or writable. the third bit is the expansion direction. The fourth bit tells the processer whether its a code or data
+segment. The fifth bit describes whether its a system descriptor (0), or a code / data 
+descriptor (1). the Sixth and seventh bit describe its privledge level (0-3). the lower
+the privledge level, the more control over memory your in (bootloaderis at privledge level 
+0). descriptors that describe portions of memory with higher levels of privledge would mean
+that whatever is running there (some sort of user program), wouldn't have the same amount of 
+over the system as the boot loader. for example, a user program wouldn't be able to just use
+cli hlt to halt the entire system like we can in the bootloader. the last bit of the access
+byte is whether the descriptor is undefined, or has a valid base a limit. it is used with 
+virtual memory.
+
+now comes the last byte.
+Im just going to link to usefull reasources because I find it kind
+of pointless to just describe it here whem I didnt have any trouble understanding it.
+
+http://ece-research.unm.edu/jimp/310/slides/micro_arch2.html
+http://ringzero.free.fr/os/protected%20mode/Pm/PM1.ASM
+
+addressing is different now. in real mode, it used to be segment:offset, but now its
+descriptor:offset. The segment registers (CS, DS, ES...)are now used to describe 
+an index into the GDT. In the GDT, we have a bunch of 8 byte entrys describing 
+portions on memory. so if we want to sepcify an address, all we need to do is
+say for example 0x08:88. this will get the second entry of the GDT (code descriptor), and add
+the offset with the base address. see image for a detailed look. remember each entry is 
+8 bytes.
+
+http://ece-research.unm.edu/jimp/310/slides/micro_arch2-1.gif
+
+how does the cpu know where the GDT is? thats where the GDTR register come into play.
+the gdtr holds the size and the location of the GDT. link for more info.
+
+https://en.wikibooks.org/wiki/X86_Assembly/Global_Descriptor_Table
+
+Switching into protected mode. the register CR0 contains the pe flag in bit 0
+we or it with 00000001 to set the pe flag in eax, then put the valu of eax back into CR0
+
+	mov 	eax, cr0						
+	or 		eax, 1
+	mov 	cr0, eax 
 
 We are not yet in full protected mode! Section 10.3 of the INTEL
 80386 PROGRAMMER'S REFERENCE MANUAL 1986 states:

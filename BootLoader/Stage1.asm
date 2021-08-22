@@ -274,11 +274,11 @@ LoadStage2:
 		mov 	dx, ax
 		shr 	dx, 0x0001 							 
 		add 	cx, dx								
-		mov 	bx, 0x0200							
+		mov 	bx, 0x0200					; where our FAT is located					
 
 
 		add 	bx, cx 						; index into FAT
-		mov 	dx, WORD [bx] 				; read two byted from FAT
+		mov 	dx, WORD [bx] 				; read two bytes from FAT
 		test 	ax, 0x0001					; AND to test if Odd
 		jnz 	OddCluster
 
