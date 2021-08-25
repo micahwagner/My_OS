@@ -315,6 +315,63 @@ Wait_Output:
 	jz 		Wait_Output 					; jumps if ZF is 1, returns if ZF is 0
 	ret
 
+;*************************************
+;Pmode functions (print)
+;*************************************
+
+lets say this is our screen:
+
+* * * * *
+* * * * *
+* * * * *
+* * * * *
+* * * * *
+
+each * represents a pixel. if we want to convert the x/y location to a
+linear address (in memory because thats where the screen buffer is),
+we use this simple calculation:
+
+x + (y * screenwidth)
+
+you could imagine each y location is each row of pixels(*). 
+
+so lets see where (5,4) is on the screen
+
+* * * * *
+* * * * *
+* * * * *
+* * * * (*)
+* * * * *
+
+location (5, 4) is four rows down, and 5 pixels to the right.
+I we wanted to conver this into a linear address, you would multiply 
+the Y corrdinate (4) by the screen width, then add x. so it would be:
+
+5 + (3 * 5) = 20
+
+so we get twenty five. if we lay out our screen buffer like how its stored 
+in memory, we get
+
+* * * * * 	* * * * * 	* * * * * 	* * * * (*)		* * * * *
+
+as you can see, the 20th pixel over is circled. the reason I multiplpy by
+3 is because we start counting rows at 0. so by multiplying by the 
+y * screenwidth, we get the start of the correct row, then we add
+x as an offset. so lets do (3, 2).
+
+* * * * *
+* * (*) * *
+* * * * *
+* * * * *
+* * * * *
+
+3 + (1 * 5) = 8
+
+* * * * * 	* * (*) * * 	* * * * * 	* * * * *	* * * * *
+
+the reason we dont subtract the x by one is so we can index every pixel
+in each row. we need to subtract the y by one beause we need to be at the
+of the row were in.
 
 
 

@@ -284,12 +284,12 @@ LoadStage2:
 
 	EvenCluster:
 
-		shr 	dx, 0x0004 					; take high 12 bits
+		and 	dx, 0000111111111111b 		; take low 12 bits
 		jmp 	CheckEndCluster
 
 	OddCluster:
 
-		and 	dx, 0000111111111111b 		; take low 12 bits
+		shr 	dx, 0x0004 					; take high 12 bits
 
 	CheckEndCluster:
 
