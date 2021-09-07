@@ -389,6 +389,8 @@ main:
 	or 		eax, 1
 	mov 	cr0, eax 
 
+
+
 ;This reloads the CS register and flushes the
 ;real-mode instructions from the prefetch queue. CS is the segment
 ;register used for instruction fetches, so this is where the switch
@@ -404,6 +406,7 @@ main:
 
 msg db  0x0A, 0x0A, "                              - Welcome to MiDOS -", 0 
 LoadMsg db	"Preparing to load operating system...",13,10,0
+TestMsg db "testing", 0
 
 ;=======================================
 ;Stage 3 "kernel"

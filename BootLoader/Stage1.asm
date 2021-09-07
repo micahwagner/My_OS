@@ -105,14 +105,14 @@ LoadSectors:
 ;AX = cluster
 ;=======================================
 
-; first two entries in FAT are reserved, data region starts counting from 2 - num of clusters
+; first two entries in FAT are reserved, data region starts counting from 2 
 
 ClusterLBA:
 	sub 	ax, 0x0002
 	xor 	cx, cx
 	mov 	cl, BYTE [bpbSectorsPerCluster]
 	mul 	cx
-	add 	ax, WORD [datasector] 			; base data sector
+	add 	ax, WORD [dataregion] 			; base data sector
 	ret
 
 ;=======================================
@@ -170,28 +170,37 @@ Main:
 	call	Print							; call our print function
 
 ;=======================================
-;Load root directory table
+;Loads the FAT and root directory table
 ;=======================================
 
-LoadRoot:
-		; calculate size of root directory and store in cx
+LoadFatRoot:
 
-		xor 	cx, cx
-		xor 	dx, dx
+		; get size of FAT and store in cx
+
+		xor 	ax, ax
+		mov 	al, BYTE [bpbNumberOfFATs]
+		mul 	WORD [bpbSectorsPerFAT]
+		mov 	cx, ax
+
+		; get starting location of Root Entry in RAM
+
+		mul 	WORD [bpbBytesPerSector] 		; mul FAT sector size to get bytes
+		add 	ax, 0x200 						; add with where we are loaded into
+		mov 	WORD [rootregion], AX 			; store for later
+
+		; calculate size of root directory and add with FAT and reserved sectors 
+		; store in cx
+
+		xor 	dx, dx 							; prepare dx for div
 		mov 	ax, 0x0020						; use the value 32 to multiplay with the amount of root entries
 		mul 	WORD [bpbRootEntries]			; because each root entry is 32 bytes long
 		div 	WORD [bpbBytesPerSector]		; devide by bytes per sector so we get how many sectors the root directory is
-		xchg 	ax, cx                      	; exchange values of ax with cs
+		add 	cx, ax                      	; add size of FAT with size of root
+		mov 	ax, WORD [bpbReservedSectors] 	; set ax to starting location of FAT
+		mov 	WORD [dataregion], cx 			; store to get the start of data region
+		add 	WORD [dataregion], ax 			; account for reserved sectors
 
-		; compute starting location of root and store in ax
-
-		mov 	al, BYTE [bpbNumberOfFATs] 		; get number of fats
-		mul 	WORD [bpbSectorsPerFAT]			; multiply by sectors per fat
-		add 	ax, WORD [bpbReservedSectors]	; account for reserved sectors
-		mov 	WORD [datasector], ax       	; base of root directory
-		add 	WORD [datasector], cx 			; add with size end of root for data region
-
-		mov 	bx, 0x0200
+		mov 	bx, 0x200
 		call 	LoadSectors	
 
 ;=======================================
@@ -201,7 +210,7 @@ LoadRoot:
 
 
 		mov 	cx, WORD [bpbRootEntries] 	; counter
-		mov 	di, 0x0200 					; location where root resides
+		mov 	di, WORD [rootregion] 		; location where root resides in RAM (after FAT)
 	RootLoop:
 		push 	cx
 		mov 	cx, 0x000B 					; Character name is 11 bytes 
@@ -209,17 +218,17 @@ LoadRoot:
 		push 	di 							; push di because it gets incremented from rep cmpsb 
 	rep cmpsb 								; compare DS:SI and ES:DI by subtraction. rep repeats cmpsb cx times (11)
 		pop 	di
-		je 		LoadFat 					; if equal, jump to load fat
+		je 		LoadFile 					; if equal, jump to load fat
 		pop 	cx
 		add 	di, 0x0020 					; add 32 bytes for next entry
 		loop 	RootLoop 					; decs cx reg and checks for 0, if 0, execute next line
 		jmp 	Failure
 
 ;=======================================
-;load fat 
+;load file (stage 2)
 ;=======================================
 
-LoadFat:
+LoadFile:
  	
 	; di has start of root entry we want, add26 to get the 26th part of entry (starting cluster)
 
@@ -227,17 +236,6 @@ LoadFat:
 	call 	Print	
 	mov 	dx, WORD [di + 0x001A] 			; starting cluster
 	mov 	WORD [cluster], dx
-
-	; compute size of FAT and store in "cx"
-
-	xor 	ax, ax
-	mov 	al, BYTE [bpbNumberOfFATs]
-	mul 	WORD [bpbSectorsPerFAT]
-	mov 	cx, ax
-	mov 	ax, WORD [bpbReservedSectors] 	; remember FAT begins right after reserved sectors
-
-	mov 	bx, 0x0200 						; put FAT above bootcode
-	call 	LoadSectors
 
 	; set destination for Stage2 to 0050:0000
 
@@ -284,12 +282,12 @@ LoadStage2:
 
 	EvenCluster:
 
-		and 	dx, 0000111111111111b 		; take low 12 bits
+		and 	dx, 0000111111111111b 		; take low 12 bits because of little endian
 		jmp 	CheckEndCluster
 
 	OddCluster:
 
-		shr 	dx, 0x0004 					; take high 12 bits
+		shr 	dx, 0x0004 					; take high 12 bits because of little endian
 
 	CheckEndCluster:
 
@@ -320,7 +318,8 @@ LoadStage2:
 	absoluteHead	db 0x00
 	absoluteCylinder	db 0x00
 
-	datasector  dw 0x0000
+	rootregion 	dw 0x0000
+	dataregion  dw 0x0000
 	cluster     dw 0x0000
 	ImageName   db "STAGE2  SYS"
 
