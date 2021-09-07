@@ -263,6 +263,57 @@ InstallGDT:
 ;0x92: system control port A
 ;=======================================
 
+CheckA20:
+    pushf 									; save flags
+    push 	ds 								; push data segment registers 
+    push 	es
+    push 	di
+    push 	si
+ 
+    cli
+ 
+    xor 	ax, ax 
+    mov 	es, ax 							; set es to 0
+ 
+    not 	ax
+    mov 	ds, ax 							; set ds to 0xFFFF
+ 
+    mov 	di, 0x0500
+    mov 	si, 0x0510
+
+    mov 	al, byte [es:di] 					; save whats in 0000:0500
+    push 	ax
+ 
+    mov 	al, byte [ds:si] 					; save whats in FFFF:0510
+    push 	ax
+ 
+    mov 	BYTE [es:di], 0x00 				; if A20 is set, then es:di will contain 0
+    mov 	BYTE [ds:si], 0xFF 				; if A20 isn't set, then es:di will contain 0xFF 
+ 	cmp 	BYTE [es:di], 0xFF 				; because the address 0x100500 (ds:si) will just be
+ 											; 0x500 on the address bus, lines 21 and up are disabled
+
+
+    pop 	ax 									; restore what was in locations es:di, ds:si
+    mov 	byte [ds:si], al
+ 
+    pop 	ax
+    mov 	byte [es:di], al
+ 
+    mov 	ax, 0
+    je 		CheckA20Exit
+ 
+    mov 	ax, 1
+ 
+CheckA20Exit:
+    pop 	si
+    pop 	di
+    pop 	es
+    pop 	ds
+    popf
+    sti
+ 
+    ret
+
 
 ;---------------------------------------
 ;Enable through Bios	
@@ -361,6 +412,39 @@ Wait_Output:
 	ret
 
 
+HandleA20:
+
+	call 	CheckA20
+	and 	ax, 1
+	jnz 	A20Enabled
+
+	call 	EnableA20_Bios
+	call 	CheckA20
+	and 	ax, 1
+	jnz 	A20Enabled
+
+	call 	EnableA20_SysControlA
+	call 	CheckA20
+	and 	ax, 1
+	jnz 	A20Enabled
+
+	call 	EnableA20_KBCommand
+	call 	CheckA20
+	and 	ax, 1
+	jnz 	A20Enabled
+
+	call 	EnableA20_KBOutputPort
+	call 	CheckA20
+	and 	ax, 1
+	jnz 	A20Enabled
+
+A20Failed:
+	mov 	si, A20FailedMsg
+	call Print
+	ret
+
+A20Enabled:
+	ret
 
 ;=======================================
 ;Stage 2 entry point			
@@ -382,7 +466,7 @@ main:
 
 	call 	InstallGDT 						; instal GDT into GDTR
 
-	call 	EnableA20_KBOutputPort 			; enable A20 Gate
+	call 	HandleA20 						; enable A20 Gate
 
 	cli 									; disbale interupts (do not enable because we cant use interrupts when in pmode)
 	mov 	eax, cr0						; set cr0 first bit to 1 so we can "go into pmode"
@@ -404,9 +488,10 @@ main:
 ;Data			
 ;---------------------------------------
 
-msg db  0x0A, 0x0A, "                              - Welcome to MiDOS -", 0 
+msg db  0x0A, 0x0A, "                                   - MiDOS -", 0 
 LoadMsg db	"Preparing to load operating system...",13,10,0
 TestMsg db "testing", 0
+A20FailedMsg db "The A20 gate failed to open", 0
 
 ;=======================================
 ;Stage 3 "kernel"
