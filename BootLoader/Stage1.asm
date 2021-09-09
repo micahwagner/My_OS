@@ -186,7 +186,7 @@ LoadFatRoot:
 
 		mul 	WORD [bpbBytesPerSector] 		; mul FAT sector size to get bytes
 		add 	ax, 0x200 						; add with where we are loaded into
-		mov 	WORD [rootregion], AX 			; store for later
+		mov 	WORD [rootregion], ax 			; store for later
 
 		; calculate size of root directory and add with FAT and reserved sectors 
 		; store in cx
@@ -218,8 +218,8 @@ LoadFatRoot:
 		push 	di 							; push di because it gets incremented from rep cmpsb 
 	rep cmpsb 								; compare DS:SI and ES:DI by subtraction. rep repeats cmpsb cx times (11)
 		pop 	di
-		je 		LoadFile 					; if equal, jump to load fat
 		pop 	cx
+		je 		LoadFile 					; if equal, jump to load fat
 		add 	di, 0x0020 					; add 32 bytes for next entry
 		loop 	RootLoop 					; decs cx reg and checks for 0, if 0, execute next line
 		jmp 	Failure

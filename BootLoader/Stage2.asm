@@ -1,4 +1,12 @@
 ; not limited to 512 bytes
+
+%define 	ROOTLOC 0x192 					; offset into stage 1
+%define 	DATAREGLOC 0x194 				; ^	
+%define 	CODE_DESC 0x08
+%define 	DATA_DESC 0x10
+%define 	IMAGE_RMODE_BASE 0x3000
+%define 	IMAGE_PMODE_BASE 0x100000
+
  
 org 0x500									; we are loaded at linear address 0x500
  
@@ -31,187 +39,6 @@ PrintDone:
 	popa
 	ret									; we are done, so return
  
-;---------------------------------------
-;Pmode (32 - bit) functions 					
-;---------------------------------------
-
-bits 	32
-
-%define		VIDMEM	0xB8000					; video memory
-%define		COLS	80						; width and height of screen
-%define		LINES	25
-%define		CHAR_ATTRIB 00001110b			; character attribute (Magenta text on white background)
-
-CurX 	db 0
-CurY 	db 0
-
-;---------------------------------------
-;Puts a character on th screen		
-;BL = character to print		
-;---------------------------------------
-
-
-PChar32:
-	
-	pusha
-	mov 	edi, VIDMEM
-
-	xor 	eax, eax
-	mov 	ecx, COLS * 2 					; each char is 2 bytes, we are trying to find the linear address
-	mov 	al, BYTE [CurY] 				; multiply y value by screen width
-	mul 	ecx
-	push 	eax 							; store multiplication
-
-	mov 	al, BYTE [CurX]					; multiply CurX by 2 because it is 2 bytes
-	mov 	cl, 2
-	mul 	cl
-	pop 	ecx
-	add 	eax, ecx 						; add x with y * screenwidth
-
-	xor 	ecx, ecx
-	add 	edi, eax 						; since edi contains base address, add offset
-
-	cmp 	bl, 0x0A 						; 0x0A is asscii for new line, so check for 0x0A
-	je 		NewRow
-
-	mov 	dl, bl 							; because of little endian format, dl is stored 
-	mov 	dh, CHAR_ATTRIB					; at the data part, and dh is the char attribute
-	mov 	WORD [edi], dx 
-
-	inc 	BYTE [CurX] 					; go to next character
-	cmp 	BYTE [CurX], COLS 				; are we at the end of the row?
-	je 		NewRow							; yes, go to new line
-	jmp 	PDone 							; no, were done
-
-NewRow:
-	
-	mov 	BYTE [CurX], 0 					; were back at collum 0
-	inc 	BYTE [CurY] 					; go to next row
-
-PDone:
-
-	popa
-	ret
-
-;---------------------------------------
-;Prints a string on th screen	
-;EBX = address of string to print		
-;---------------------------------------
-
-PString32:
-	
-	pusha
-	push 	ebx 							; copy string address for later
-	pop 	edi
-
-SLoop32:
-	
-	mov 	bl, BYTE [edi] 					; get next character
-	cmp 	bl, 0 							; test if done
-	je 		SDone32 						; yes were done
-	call 	PChar32 						; were not, so print char
-	inc 	edi 							; get next char
-	jmp 	SLoop32
-
-SDone32:
-
-	mov 	bh, BYTE [CurY]
-	mov 	bl, BYTE [CurX]
-	call 	MovCur
-
-	popa
-	ret
-
-
-;---------------------------------------
-;updates hardware cursor
-;bh = Y pos
-;bl = X pos
-;0xf = cursor location low
-;0xe = cursor location high
-;0x3D4 = index register
-;0x3D5 = data register 		
-;---------------------------------------
-
-MovCur:
-
-	pusha
-
-; Here, CurX and CurY are relitave to the current position on screen, not in memory.
-; That is, we don't need to worry about the byte alignment when displaying characters,
-; so just follow the forumla: location = CurX + CurY * COLS
-	
-	xor		eax, eax
-	mov		ecx, COLS
-	mov		al, bh			
-	mul		ecx								
-	add		al, bl						
-	mov		ebx, eax
-
-;two values are needed to write to the CRT controller. 
-;One to the Index Register 0x3D4 (Containing the type of data we are writing), 
-;and one to the Data Register 0x3D5 (Containing the data)
-
-; set low byte of cursor 0x0f
-
-	mov 	al, 0x0F
-	mov 	dx, 0x03D4
-	out 	dx, al
-
-	mov 	al ,bl
-	mov 	dx, 0x03D5
-	out 	dx, al
-
-; set high byte of cursor 0x0e
-
-	xor 	eax, eax
-
-	mov 	al, 0x0E
-	mov 	dx, 0x03D4
-	out 	dx, al
-
-	mov 	al ,bh
-	mov 	dx, 0x03D5
-	out 	dx, al
-
-	popa
-	ret
-
-
-;---------------------------------------
-;clears the screen
-;---------------------------------------
-
-ClrScr32:
-	pusha
-	cld 									; set direction flag to 0
-	mov 	edi, VIDMEM
-	mov 	cx, 2000						; 2000 chars on screen (80 * 25)
-	mov 	ah, CHAR_ATTRIB
-	mov 	al, " "
-	rep 	stosw 							; store " " at VIDMEM cx amount of times
-
-	mov 	BYTE [CurX], 0
-	mov 	BYTE [CurY], 0
-	popa
-	ret
-
-;---------------------------------------
-;Goes to specified location
-;AL = x pos
-;AH = Y pos
-;---------------------------------------
-
-GotoXY:
-	pusha
-	mov 	[CurX], al
-	mov 	[CurY], ah
-	popa
-	ret
-
-
-bits 	16	
-
 
 ;=======================================
 ;Set up GDT	(Global Descriptor Table)				
@@ -440,16 +267,224 @@ HandleA20:
 
 A20Failed:
 	mov 	si, A20FailedMsg
-	call Print
-	ret
+	call 	Print
+	mov		ah, 0
+	int     0x16                    ; await keypress
+	int     0x19 
+	cli								; if we get to this point, something really bad happened
+	hlt
 
 A20Enabled:
 	ret
+
+
+;=======================================
+;Loads Kernel from Disc (same as stage 1)
+;=======================================
+
+LoadKernel:
+
+;=======================================
+;Gets info from stage 1 (rootregion, dataregion)
+;=======================================
+GetStage1Info:
+	push 	ds 								
+	mov 	ax, 0x07c0						; where stage 1 is in RAM
+	mov 	ds, ax 							; set ds to where stage 1 is
+
+	mov 	ax, WORD [ds:ROOTLOC] 			; store where root region is from RAM
+	mov 	bx, WORD [ds:DATAREGLOC] 		; store where data region is from disc
+	pop 	ds
+	mov 	WORD [rootregion], ax
+	mov 	WORD [dataregion], bx
+
+;=======================================
+;finds a file's location from the root, and returns starting cluster
+;=======================================
+
+FindFileLocation:
+	mov 	cx, WORD [bpbRootEntries] 	; counter
+	mov 	si, WORD [rootregion] 		; location where root resides in RAM (after FAT)
+
+RootLoop:
+	push 	cx
+	mov 	cx, 0x000B 					; Character name is 11 bytes 
+	mov 	di, ImageName 				; name to find
+	push 	ds 	
+	mov 	ax, 0x07c0					; where stage 1 is in RAM
+	mov 	ds, ax 						; set ds to where Root and fat were loaded is
+	push 	si 							; push si because it gets incremented from rep cmpsb 
+	rep cmpsb 							; compare DS:SI and ES:DI by subtraction. rep repeats cmpsb cx times (11)
+	pop 	si
+	je 		ReturnCluster				; if equal, jump to load fat
+	pop 	ds 							; set back to correct segment
+	pop 	cx
+	add 	si, 0x0020 					; add 32 bytes for next entry
+	loop 	RootLoop 					; decs cx (512 entrys) reg and checks for 0, if 0, execute next line
+	jmp 	FindFailed
+ReturnCluster:
+	mov 	dx, WORD [si + 0x001A] 		; starting cluster
+	pop 	ds 							; set back to correct segment
+	pop 	cx
+	mov 	WORD [cluster], dx
+	push 	0x3000 						; where to write the file
+	jmp 	LoadFile
+
+FindFailed:
+	mov     si, FindFailure
+	call    Print
+	mov     ah, 0x00
+	int     0x16                         ; await keypress
+	int     0x19
+	cli
+	hlt
+
+;=======================================
+;Load the file
+;=======================================
+
+LoadFile:
+	mov     ax, WORD [cluster] 			; cluster to read
+	pop 	bx                  		; buffer to read into
+	call    ClusterLBA                  ; convert cluster to LBA
+	xor     cx, cx
+	mov     cl, BYTE [bpbSectorsPerCluster]     ; sectors to read
+	call    LoadSectors
+
+	push    bx
+
+	mov 	ax, WORD [cluster] 			; copy currrent cluster because we need different valuse from it
+	mov 	cx, ax
+	mov 	dx, ax
+	shr 	dx, 0x0001 	 				; math to get correct FAT index						 
+	add 	cx, dx								
+	mov 	bx, 0x0200
+
+	add 	bx, cx 						; index into FAT
+
+	push 	ds 	
+	mov 	ax, 0x07c0					; where FAT is in RAM
+	mov 	ds, ax	
+
+	mov 	dx, WORD [ds:bx] 			; read two bytes from FAT
+	test 	ax, 0x0001					; AND to test if Odd
+	pop 	ds
+	add 	WORD [KernelSize], 1	
+	jnz 	OddCluster
+
+EvenCluster:
+
+	and 	dx, 0000111111111111b 		; take low 12 bits because of little endian
+	jmp 	CheckEndCluster
+
+OddCluster:
+
+	shr 	dx, 0x0004 					; take high 12 bits because of little endian
+
+CheckEndCluster:
+
+	mov 	WORD [cluster], dx
+	cmp 	dx, 0x0FF0
+	jb  	LoadFile
+
+DONE:
+ 	pop 	bx
+ 	ret
+
+
+;=======================================
+;Load Sectors function
+;AX = starting cluster
+;CX = Number of clusters to read
+;ES:BX = offset to load to
+;=======================================
+
+LoadSectors:
+	ErrorDecloration:
+		mov 	di, 0x0005					; 5 tries to work
+	LoadSectorLoop:
+		push 	ax 							; push values because LBACHS changes them
+		push 	bx
+		push 	cx
+		call 	LBACHS 						; convert starting cluster to CHS  
+		mov 	ah, 0x02 					; set Bios to read sectors
+		mov 	al, 0x01 					; amount of sectors we want to read (1)
+		mov 	ch, BYTE [absoluteCylinder]	; which Cylinder to read from
+		mov 	cl, BYTE [absoluteSector]	; which Sector to read from
+		mov 	dh, BYTE [absoluteHead]		; which Head to use
+		mov 	dl, BYTE [bsDriveNumber] 	; specified drive to read from
+		int 	0x13 						; execute bios interupt routine
+		jnc 	Success
+		xor 	ax, ax 						; set ah to 0 to Reset Disk System
+		int 	0x13 						; Execute bios int
+		dec 	di 							; decrement error counter
+		pop 	cx 							; pop original params for LBACHS
+		pop 	bx
+		pop 	ax
+		jnz     LoadSectorLoop 				; if the error counter isnt 0, try loading again
+		int 	0x18 						; if error counter is 0, then display error
+	Success:
+		mov 	si, msgProgress
+		call 	Print
+		pop 	cx 							; pop to change values for next LoadSectorLoop call
+		pop 	bx
+		pop 	ax
+		add 	bx, WORD [bpbBytesPerSector] 	; load next sector
+		inc 	ax 							; change starting cluster
+		loop 	ErrorDecloration 			; loop until num of clusters to read (cx) is 0
+		ret
+
+
+;=======================================
+;Cluster to LBA
+;cluster being the cluster in the data
+;region and in the FAT
+;
+;LBA = (cluster - 2) * sectors per cluster
+;AX = cluster
+;=======================================
+
+; first two entries in FAT are reserved, data region starts counting from 2 
+
+ClusterLBA:
+	sub 	ax, 0x0002
+	xor 	cx, cx
+	mov 	cl, BYTE [bpbSectorsPerCluster]
+	mul 	cx
+	add 	ax, WORD [dataregion] 			; base data sector
+	ret
+
+;=======================================
+;LBA to CHS conversion
+;AX = LBA
+;Cylinder = LBA / (SPT * HPC)
+;Head = (LBA / SPT ) mod HPC
+;Sector = LBA mod SPT + 1
+;=======================================
+
+; the dividend has to be twice the size (32 bit) of the divisor when using div
+; dx contains the upper half of our dividend
+; ax contains the lower half of our dividend
+; ax contains quotient and dl contains remainder
+
+LBACHS:
+	xor 	dx, dx							; prepare dx:ax for operation
+	div 	WORD [bpbSectorsPerTrack] 		
+	inc 	dl 								; adjust for sector 0
+	mov 	BYTE [absoluteSector], dl
+	xor 	dx, dx 							; prepare dx:ax for operation
+	div 	WORD [bpbHeadsPerCylinder] 		
+	mov     BYTE [absoluteHead], dl 		
+	mov     BYTE [absoluteCylinder], al
+	ret 	
+
+
 
 ;=======================================
 ;Stage 2 entry point			
 ;=======================================
  
+
 main:
 
 	cli 									; clear interrupts (dont re-enable)
@@ -465,8 +500,8 @@ main:
 	call 	Print
 
 	call 	InstallGDT 						; instal GDT into GDTR
-
 	call 	HandleA20 						; enable A20 Gate
+	call 	LoadKernel  					; loads kernel from disc into mem location 0x3000
 
 	cli 									; disbale interupts (do not enable because we cant use interrupts when in pmode)
 	mov 	eax, cr0						; set cr0 first bit to 1 so we can "go into pmode"
@@ -484,36 +519,81 @@ main:
 
 	jmp 	0x08:Stage3						; 0x08 because thats the code descriptor	
 
-;---------------------------------------
-;Data			
-;---------------------------------------
 
-msg db  0x0A, 0x0A, "                                   - MiDOS -", 0 
-LoadMsg db	"Preparing to load operating system...",13,10,0
-TestMsg db "testing", 0
-A20FailedMsg db "The A20 gate failed to open", 0
 
 ;=======================================
-;Stage 3 "kernel"
+;Stage 3 
 ;=======================================
 
 bits 32
 
 Stage3:
 
-	mov		ax, 0x10						; set data segments to data selector (0x10)
+	mov		ax, DATA_DESC					; set data segments to data selector (0x10)
 	mov		ds, ax
 	mov		es, ax
 	mov 	ss, ax
 	mov		esp, 90000h						; stack begins from 90000h
 
-	call 	ClrScr32
-	mov 	ebx, msg
-	call 	PString32
+CopyKernelImage:
 
-	cli 
-	hlt
+	movzx 	eax, WORD [KernelSize]
+	movzx 	ebx, WORD [bpbBytesPerSector] 
+	mul 	ebx
+	mov 	ebx, 4
+	div 	ebx 							; devide by 4 because we load 4 bytes
+	cld
+   	mov     esi, IMAGE_RMODE_BASE
+   	mov		edi, IMAGE_PMODE_BASE
+   	mov 	ecx, eax 						
+   	rep 	movsd 							; loads a doubleword from ds:si to es:di, repeated cx times (128)
 
+JumpToKernel:
+
+    jmp 	CODE_DESC:IMAGE_PMODE_BASE
+
+
+;=======================================
+;Data			
+;=======================================
+
+absoluteSector	db 0x00
+absoluteHead	db 0x00
+absoluteCylinder	db 0x00
+
+rootregion 	dw 0x0000
+dataregion  dw 0x0000
+cluster     dw 0x0000
+KernelSize 	dw 0x0000
+
+LoadMsg db	"Preparing to load operating system...",13,10,0
+TestMsg db "testing", 0
+A20FailedMsg db "The A20 gate failed to open", 0
+msgProgress db ".", 0
+ImageName db "MIDOSK  SYS",0
+FindFailure db "failed to find Kernel",0
+
+
+bpbOEM					db "MiDOS   " 		; cant be more than 8 bytes because  OEM starts on 11th byte
+
+bpbBytesPerSector:  	DW 512
+bpbSectorsPerCluster: 	DB 1
+bpbReservedSectors: 	DW 1
+bpbNumberOfFATs: 	    DB 2
+bpbRootEntries: 	    DW 512
+bpbTotalSectors: 	    DW 2880
+bpbMedia: 	            DB 0xF0
+bpbSectorsPerFAT: 	    DW 9
+bpbSectorsPerTrack: 	DW 18
+bpbHeadsPerCylinder: 	DW 2
+bpbHiddenSectors: 	    DD 0
+bpbTotalSectorsBig:     DD 0
+bsDriveNumber: 	        DB 0
+bsUnused: 	            DB 0
+bsExtBootSignature: 	DB 0x29
+bsSerialNumber:	        DD 0xa0a1a2a3
+bsVolumeLabel: 	        DB "DOS FLOPPY "
+bsFileSystem: 	        DB "FAT12   "
 
 
 
