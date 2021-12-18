@@ -363,13 +363,17 @@ LoadFile:
 	add 	bx, cx 						; index into FAT
 
 	push 	ds 	
+	push 	ax
+
 	mov 	ax, 0x07c0					; where FAT is in RAM
 	mov 	ds, ax	
 
+	pop 	ax
+
 	mov 	dx, WORD [ds:bx] 			; read two bytes from FAT
-	test 	ax, 0x0001					; AND to test if Odd
 	pop 	ds
-	add 	WORD [KernelSize], 1	
+	add 	WORD [KernelSize], 1
+	test 	ax, 0x0001					; AND to test if Odd	
 	jnz 	OddCluster
 
 EvenCluster:
@@ -570,7 +574,7 @@ LoadMsg db	"Preparing to load operating system...",13,10,0
 TestMsg db "testing", 0
 A20FailedMsg db "The A20 gate failed to open", 0
 msgProgress db ".", 0
-ImageName db "MIDOSK  SYS",0
+ImageName db "MIDOS   SYS",0
 FindFailure db "failed to find Kernel",0
 
 
