@@ -43,3 +43,6 @@ Below is a list of prerequisite knowledge needed before building a 32-bit x86 op
 - [https://www.rapidtables.com/convert/number/ascii-to-hex.html] - helped me debug things in the root region of the FAT-12 formatted disk.
 - [https://www.calculator.net/hex-calculator.html?number1=3000&c2op=%2B&number2=512&calctype=op&x=95&y=22] - helped me calculate adress offsets
 - [https://titanwolf.org/Network/Articles/Article?AID=7bdc4d62-bc1e-49cc-8ca6-4657238b013c#gsc.tab=0] - useful when debugging the OS at runtime.
+- [https://wiki.osdev.org/Main_Page] - good gateway to many other useful sources
+- [https://nithinbekal.com/notes/os/] - another good gateway to useful sources
+- [https://wiki.osdev.org/Creating_an_Operating_System] - greate source as a guide on the steps required to build an operating system
