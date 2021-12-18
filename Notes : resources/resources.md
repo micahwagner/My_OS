@@ -1,5 +1,5 @@
 # resources
-This file contains the main sources I used while developing this operating system. That being said, this is around 40% of the total resources I used. 
+This file contains the main sources I used while developing this operating system. That being said, this is around 40% of the total resources I used. If you intend on making an operating system, you will have much more sources than the ones listed below. This resource page is supposed to be a starting point.
 
 # prerequisite knowledge
 Below is a list of prerequisite knowledge needed before building a 32-bit x86 operating system
