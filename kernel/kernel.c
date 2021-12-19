@@ -1,4 +1,3 @@
-#include "io/io.h"
 #include "lib/lib.h"
 
 void kernel_main()
