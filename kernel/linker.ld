@@ -1,4 +1,4 @@
-ENTRY(kernel_main) 			/* The entry symbol of our output file */
+ENTRY(entry) 			/* The entry symbol of our output file */
 OUTPUT_FORMAT(binary)
 SECTIONS
 {

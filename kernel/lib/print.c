@@ -22,7 +22,7 @@ static void scroll()
 {
 
     // Get a space character with the default colour attributes.
-    u8int attributeByte = (0 /*black*/ << 4) | (15 /*white*/ & 0x0F);
+    u8int attributeByte = (0 /*black*/ << 4) | (14 /*white*/ & 0x0F);
     u16int blank = 0x20 /* space */ | (attributeByte << 8);
 
     // Row 25 is the end, this means we need to scroll up
@@ -52,7 +52,7 @@ void print_char(char c)
 {
     // The background colour is black (0), the foreground is white (15).
     u8int backColour = 0;
-    u8int foreColour = 15;
+    u8int foreColour = 14;
 
     // The attribute byte is made up of two nibbles - the lower being the 
     // foreground colour, and the upper the background colour.

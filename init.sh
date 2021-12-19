@@ -4,7 +4,7 @@ sh Assemble_Asm.sh
 sh Execute_Kernel_Compiler.sh
 sh Bundler.sh
 cd ../
-
+bochs -f BochsConfig.txt
 
 
 

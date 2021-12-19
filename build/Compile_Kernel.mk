@@ -1,4 +1,7 @@
-MODULES = Object/io.asm.o Object/kernel.o Object/print.o
+MODULES = Object/kernel_entry.asm.o Object/kernel.o \
+		Object/io.asm.o Object/print.o 
+
+INCLUDES = .././kernel
 
 FLAGS := -O0 -Wall -g -ffreestanding \
 	-nostartfiles -nodefaultlibs \
@@ -12,10 +15,10 @@ bin/MIDOS.SYS: $(MODULES)
 	i686-elf-gcc $(FLAGS) -T .././kernel/linker.ld -o bin/MIDOS.SYS -ffreestanding -O0 -nostdlib Object/kernelfull.o
 
 Object/kernel.o: .././kernel/kernel.c
-	i686-elf-gcc -I ..././kernel $(FLAGS) -c .././kernel/kernel.c -o Object/kernel.o
+	i686-elf-gcc -I $(INCLUDES) $(FLAGS) -c .././kernel/kernel.c -o Object/kernel.o
 
 Object/print.o: .././kernel/lib/print.c
-	i686-elf-gcc -I ..././kernel .././kernel/lib $(FLAGS) -c $^ -o $@
+	i686-elf-gcc -I $(INCLUDES) .././kernel/lib $(FLAGS) -c $^ -o $@
 
 
 
