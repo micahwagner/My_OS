@@ -1,6 +1,6 @@
 MODULES = Object/kernel_entry.asm.o Object/kernel.o \
 		Object/io.asm.o Object/print.o \
-		Object/mem.o
+		Object/mem.o Object/string.o
 
 INCLUDES = .././kernel
 
@@ -22,6 +22,9 @@ Object/print.o: .././kernel/lib/print.c
 	i686-elf-gcc -I $(INCLUDES) .././kernel/lib $(FLAGS) -c $^ -o $@
 
 Object/mem.o: .././kernel/lib/mem.c
+	i686-elf-gcc -I $(INCLUDES) .././kernel/lib $(FLAGS) -c $^ -o $@
+
+Object/string.o: .././kernel/lib/string.c
 	i686-elf-gcc -I $(INCLUDES) .././kernel/lib $(FLAGS) -c $^ -o $@
 
 

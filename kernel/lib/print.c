@@ -48,7 +48,7 @@ static void scroll()
 }
 
 // Writes a single character out to the screen.
-void print_char(char c)
+void print_char(u8int c)
 {
     // The background colour is black (0), the foreground is white (15).
     u8int backColour = 0;
@@ -130,7 +130,7 @@ void clear_screen()
 }
 
 // Outputs a null-terminated ASCII string to the monitor.
-void print_str(char *c)
+void print_str(u8int *c)
 {
     int i = 0;
     while (c[i])
