@@ -10,6 +10,7 @@ void kernel_main()
     s8int string1[7];
     s8int string2[25];
     s8int string3[25];
+    s8int string4[] = "stupid ";
     u8int *video_memory = (u8int *)0xB8000;
     u8int *dest = (u8int *)0xB8500;
     u8int *dest1 = (u8int *)0xB8900;
@@ -44,7 +45,10 @@ void kernel_main()
     print_str("\n");
     int_to_ascii(num, string3);
     print_str(string3);
-    
 
+    //preform string concatenation
+    print_str("\n");
+	strcat(string4, string1);
+	print_str(string4);
     return;
 }

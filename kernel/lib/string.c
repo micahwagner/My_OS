@@ -35,9 +35,12 @@ s8int *strcpy(s8int *dest, const s8int *src) {
 
 // Concatenate the NULL-terminated string src onto
 // the end of dest, and return dest.
-// char *strcat(char *dest, const char *src) {
 
-// }
+s8int *strcat(s8int *dest, const s8int *src) {
+	strcpy(dest + strlen(dest), src);
+  	return dest;
+}
+
 // return the length of string
 s32int strlen(const s8int *ptr) {
     s32int i = 0;
