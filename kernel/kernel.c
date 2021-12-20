@@ -8,6 +8,8 @@ void kernel_main()
     // make some variables to be used when testing functions
     s8int string[] = "string";
     s8int string1[7];
+    s8int string2[25];
+    s8int string3[25];
     u8int *video_memory = (u8int *)0xB8000;
     u8int *dest = (u8int *)0xB8500;
     u8int *dest1 = (u8int *)0xB8900;
@@ -31,6 +33,18 @@ void kernel_main()
     print_str(string);
     strcpy(string1, string);
     print_str(string1);
+
+    //preform string compare operation
+    print_str("\n");
+    s32int a = strcmp(string, string1);
+    int_to_ascii(a, string2);
+    print_str(string2);
+
+    //preform int to ascii
+    print_str("\n");
+    int_to_ascii(num, string3);
+    print_str(string3);
+    
 
     return;
 }
