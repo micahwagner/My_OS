@@ -1,5 +1,4 @@
 cd build
-sh Assemble_Bootloader.sh
 sh Assemble_Asm.sh
 sh Execute_Kernel_Compiler.sh
 sh Bundler.sh
