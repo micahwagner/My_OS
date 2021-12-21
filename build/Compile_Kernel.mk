@@ -1,6 +1,7 @@
 MODULES = Object/kernel_entry.asm.o Object/kernel.o \
 		Object/io.asm.o Object/print.o \
-		Object/mem.o Object/string.o
+		Object/mem.o Object/string.o \
+		Object/interrupt.asm.o Object/isr.o Object/idt.o
 
 INCLUDES = .././kernel
 
@@ -27,6 +28,11 @@ Object/mem.o: .././kernel/lib/mem.c
 Object/string.o: .././kernel/lib/string.c
 	i686-elf-gcc -I $(INCLUDES) .././kernel/lib $(FLAGS) -c $^ -o $@
 
+Object/idt.o: .././kernel/interrupts/idt.c
+	i686-elf-gcc -I $(INCLUDES) .././kernel/interrupts $(FLAGS) -c $^ -o $@
+
+Object/isr.o: .././kernel/interrupts/isr.c
+	i686-elf-gcc -I $(INCLUDES) .././kernel/interrupts $(FLAGS) -c $^ -o $@
 
 
 

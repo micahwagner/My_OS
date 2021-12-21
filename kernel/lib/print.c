@@ -140,3 +140,9 @@ void print_str(s8int *c)
 }
 
 
+// print an integer out to the screen
+void print_int(s32int n) {
+    s8int str[32];
+    int_to_ascii(n, str);
+    print_str(str);
+}

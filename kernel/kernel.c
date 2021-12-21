@@ -1,4 +1,6 @@
 #include "lib/lib.h"
+#include "interrupts/idt.h"
+#include "interrupts/isr.h"
 
 void kernel_main()
 {
@@ -44,12 +46,14 @@ void kernel_main()
 
     //preform int to ascii
     print_str("\n");
-    int_to_ascii(num1, string3);
-    print_str(string3);
+    print_int(num1);
 
     //preform string concatenation
     print_str("\n");
 	strcat(string4, string1);
 	print_str(string4);
+
+	// initialize interrupts
+	init_interrupts();
     return;
 }

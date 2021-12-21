@@ -3,6 +3,7 @@
 
 #include "type.h"
 #include ".././io/io.h"
+#include "string.h"
 // Write a single character out to the screen.
 void print_char(s8int c);
 
@@ -11,5 +12,8 @@ void clear_screen();
 
 // Output a null-terminated ASCII string to the monitor.
 void print_str(s8int *c);
+
+// print an integer out to the screen
+void print_int(s32int n);
 
 #endif // PRINT
