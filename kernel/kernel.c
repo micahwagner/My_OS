@@ -1,6 +1,5 @@
 #include "lib/lib.h"
 #include "interrupts/idt.h"
-#include "interrupts/isr.h"
 
 void kernel_main()
 {
@@ -55,5 +54,7 @@ void kernel_main()
 
 	// initialize interrupts
 	init_interrupts();
+	asm volatile("int $0x3");
+    asm volatile("int $0x4");
     return;
 }

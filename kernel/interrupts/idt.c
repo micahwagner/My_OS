@@ -16,7 +16,7 @@ void init_interrupts() {
 
 static void init_idt()
 {
-    idt_ptr.limit = sizeof(idt_entry_t) * 256 -1;
+    idt_ptr.limit = sizeof(idt_entry_t) * 256 - 1;
     idt_ptr.base  = (u32int)&idt_entries;
 
     mem_set(&idt_entries, 0, sizeof(idt_entry_t)*256);
