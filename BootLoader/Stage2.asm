@@ -65,6 +65,24 @@ GDTData:
 	db 		11001111b 						; granularity (see GDT for break down) and bits 16-19 of limit
 	db 		0 								; high byte for base address
 
+;start of GDT User Code segment
+	
+	dw		0x0FFFF 						; 0 - 15 length for segment (limit)
+	dw		0 								; low 16 bits for base address
+	db 		0 								; middle byte for base address
+	db 		11111010b 						; access (see GDT for the break down)
+	db 		11001111b 						; granularity (see GDT for break down) and bits 16-19 of limit
+	db 		0 								; high byte for base address
+
+;start of GDT User Data Segment
+
+	dw		0x0FFFF 						; 0 - 15 length for segment (limit)
+	dw		0 								; low 16 bits for base address
+	db 		0 								; middle byte for base address
+	db 		11110010b 						; access (see GDT for the break down)
+	db 		11001111b 						; granularity (see GDT for break down) and bits 16-19 of limit
+	db 		0 								; high byte for base address
+
 GDTR:
 	dw GDTR - GDTData - 1 					; limit (Size of GDT)
 	dd GDTData 								; base of GDT
@@ -537,6 +555,8 @@ Stage3:
 	mov		ds, ax
 	mov		es, ax
 	mov 	ss, ax
+	mov 	fs, ax
+	mov 	gs, ax
 	mov		esp, 90000h						; stack begins from 90000h
 
 CopyKernelImage:
