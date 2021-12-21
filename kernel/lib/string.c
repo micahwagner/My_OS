@@ -52,17 +52,29 @@ s32int strlen(const s8int *ptr) {
     return i;
 }
 
+
+//turns an integer into a string
 void int_to_ascii(s32int n, s8int str[]) {
     s32int i, sign;
+
+    //check if n is negative. if so, make it positive.
     if ((sign = n) < 0) n = -n;
+
     i = 0;
     do {
+
+    //modding n with 10 returns the digit in the 1's place
+    //add with "0" to correctly offset into ascii table
         str[i++] = n % 10 + '0';
     } while ((n /= 10) > 0);
 
+    //check is sign was negative. if so, add a negative sign.
     if (sign < 0) str[i++] = '-';
+
+    //add null terminator
     str[i] = '\0';
 
+    //reverse string
     reverse(str);
 }
 

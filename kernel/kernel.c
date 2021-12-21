@@ -15,6 +15,7 @@ void kernel_main()
     u8int *dest = (u8int *)0xB8500;
     u8int *dest1 = (u8int *)0xB8900;
     u32int num = 160;
+    s32int num1 = -160;
     u8int val = 37;
 
 
@@ -43,7 +44,7 @@ void kernel_main()
 
     //preform int to ascii
     print_str("\n");
-    int_to_ascii(num, string3);
+    int_to_ascii(num1, string3);
     print_str(string3);
 
     //preform string concatenation
