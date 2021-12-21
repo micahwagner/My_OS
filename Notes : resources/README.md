@@ -31,8 +31,8 @@ Below is a list of prerequisite knowledge needed before building a 32-bit x86 op
 - [https://www.ryanstan.com/assmToC.html] - helped me understand how to switch from assembly to c
 - [https://docs.oracle.com/cd/E19683-01/817-3677/chapter6-46512/index.html] good source for understanding the ELF standard
 #### technical guides:
-- [http://www.jamesmolloy.co.uk/tutorial_html/] - great source for the technical details behind a 32 bit x86 kernel.
-- [http://www.osdever.net/bkerndev/index.php] - - great source for the technical details behind a 32 bit x86 kernel.
+- [http://www.jamesmolloy.co.uk/tutorial_html/] - great source for getting the kernel set up (lib, interrupts, paging, etc...)
+- [http://www.osdever.net/bkerndev/index.php] - great source for the technical details behind a 32 bit x86 kernel.
 #### operating systems to reverse engineer:
 - https://github.com/cfenollosa/os-tutorial
 - https://github.com/michael2012z/Sparrow
