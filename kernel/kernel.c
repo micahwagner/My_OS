@@ -4,6 +4,7 @@
 void kernel_main()
 {
     // Initialise the screen (by clearing it)
+    set_fore_back_colour(14,0);
     clear_screen();
 
     // make some variables to be used when testing functions
@@ -57,7 +58,7 @@ void kernel_main()
 	asm volatile("int $0x4");
     asm volatile("int $0x3");
 
-    asm volatile("sti");
-    init_timer(50);
+    //asm volatile("sti");
+    //init_timer(50);
     return;
 }

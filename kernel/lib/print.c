@@ -6,6 +6,9 @@ u16int *video_memory = (u16int *)0xB8000;
 u8int cursor_x = 0;
 u8int cursor_y = 0;
 
+u8int backColour = 0;
+u8int foreColour = 14;
+
 // Updates the hardware cursor.
 static void move_cursor()
 {
@@ -22,7 +25,7 @@ static void scroll()
 {
 
     // Get a space character with the default colour attributes.
-    u8int attributeByte = (0 /*black*/ << 4) | (14 /*white*/ & 0x0F);
+    u8int attributeByte = (backColour << 4) | (foreColour & 0x0F);
     u16int blank = 0x20 /* space */ | (attributeByte << 8);
 
     // Row 25 is the end, this means we need to scroll up
@@ -50,9 +53,6 @@ static void scroll()
 // Writes a single character out to the screen.
 void print_char(s8int c)
 {
-    // The background colour is black (0), the foreground is white (15).
-    u8int backColour = 0;
-    u8int foreColour = 14;
 
     // The attribute byte is made up of two nibbles - the lower being the 
     // foreground colour, and the upper the background colour.
@@ -114,7 +114,7 @@ void print_char(s8int c)
 void clear_screen()
 {
     // Make an attribute byte for the default colours
-    u8int attributeByte = (0 /*black*/ << 4) | (15 /*white*/ & 0x0F);
+    u8int attributeByte = (backColour << 4) | (foreColour & 0x0F);
     u16int blank = 0x20 /* space */ | (attributeByte << 8);
 
     int i;
@@ -137,6 +137,11 @@ void print_str(s8int *c)
     {
         print_char(c[i++]);
     }
+}
+
+void set_fore_back_colour(u8int x, u8int y) {
+    foreColour = x;
+    backColour = y;
 }
 
 
