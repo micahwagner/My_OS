@@ -141,7 +141,9 @@ void print_str(s8int *c)
 
 void set_fore_back_colour(u8int x, u8int y) {
     foreColour = x;
-    backColour = y;
+
+    //get rid of the 8th bit because that describes the blinking attribute
+    backColour = y & 0x07;
 }
 
 
