@@ -1,5 +1,3 @@
-section .asm
-
 global inb
 global inw
 global outb

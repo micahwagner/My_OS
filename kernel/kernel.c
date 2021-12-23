@@ -33,15 +33,15 @@ void kernel_main()
     mem_set(dest, val, num);
 
     //preform string copy operation
-    print_str(string);
-    strcpy(string1, string);
-    print_str(string1);
+    print_str(&string);
+    strcpy(&string1, &string);
+    print_str(&string1);
 
     //preform string compare operation
     print_str("\n");
-    s32int a = strcmp(string, string1);
+    s32int a = strcmp(&string, &string1);
     int_to_ascii(a, string2);
-    print_str(string2);
+    print_str(&string2);
 
     //preform int to ascii
     print_str("\n");
@@ -49,12 +49,15 @@ void kernel_main()
 
     //preform string concatenation
     print_str("\n");
-	strcat(string4, string1);
-	print_str(string4);
+	strcat(&string4, &string1);
+	print_str(&string4);
 
 	// initialize interrupts
 	init_interrupts();
-	asm volatile("int $0x3");
-    asm volatile("int $0x4");
+	asm volatile("int $0x4");
+    asm volatile("int $0x3");
+
+    asm volatile("sti");
+    init_timer(50);
     return;
 }

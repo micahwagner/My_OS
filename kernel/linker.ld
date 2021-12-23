@@ -23,9 +23,4 @@ SECTIONS
 		*(COMMON)
 		*(.bss)
 	}
-
-	.asm : ALIGN(4096)		/* To not interfere with the text section (compiled c code) alignment, we'll stick our assembly into its own section  */
-	{			
-		*(.asm)
-	}
 }
