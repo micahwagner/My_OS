@@ -48,11 +48,11 @@ ISR_ERRCODE   13
 ISR_ERRCODE   14
 ISR_NOERRCODE 15
 ISR_NOERRCODE 16
-ISR_NOERRCODE 17
+ISR_ERRCODE   17
 ISR_NOERRCODE 18
 ISR_NOERRCODE 19
 ISR_NOERRCODE 20
-ISR_NOERRCODE 21
+ISR_ERRCODE   21
 ISR_NOERRCODE 22
 ISR_NOERRCODE 23
 ISR_NOERRCODE 24
@@ -99,10 +99,12 @@ isr_common_stub:
     mov es, ax
     mov fs, ax
     mov gs, ax
+    push esp 				; this is a reference to register_t so that the compiler wont corrupt any register_t data
 
     call isr_handler
+    pop ebx					; pop the pointer
 
-    pop ebx        ; reload the original data segment descriptor
+    pop ebx        			; reload the original data segment descriptor
     mov ds, bx
     mov es, bx
     mov fs, bx
@@ -124,10 +126,12 @@ irq_common_stub:
     mov es, ax
     mov fs, ax
     mov gs, ax
+    push esp 				; this is a reference to register_t so that the compiler wont corrupt any register_t data
 
     call irq_handler
+    pop ebx					; pop the pointer
 
-    pop ebx        ; reload the original data segment descriptor
+    pop ebx        			; reload the original data segment descriptor
     mov ds, bx
     mov es, bx
     mov fs, bx

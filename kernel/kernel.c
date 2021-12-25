@@ -58,7 +58,7 @@ void kernel_main()
 	asm volatile("int $0x4");
     asm volatile("int $0x3");
 
-    //asm volatile("sti");
-    //init_timer(50);
+    asm volatile("sti");
+    init_timer(50);
     return;
 }

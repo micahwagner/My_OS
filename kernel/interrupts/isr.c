@@ -11,26 +11,25 @@ void register_interrupt_handler(u8int n, isr_t handler)
 
 // This gets called from our ASM interrupt handler stub.
 // the argument for this function has already been set in the stack in interrupt.asm
-void isr_handler(registers_t regs)
+void isr_handler(registers_t *regs)
 {	
 	print_str("\n");
 	print_str("\n");
     print_str("recieved interrupt: ");
-    print_int(regs.int_no);
+    print_int(regs->int_no);
 
-    if (interrupt_handlers[regs.int_no] != 0)
+    if (interrupt_handlers[regs->int_no] != 0)
     {
-        isr_t handler = interrupt_handlers[regs.int_no];
-        handler(regs);
+		interrupt_handlers[regs->int_no](regs);
     }
 }
 
 // This gets called from our ASM interrupt handler stub.
-void irq_handler(registers_t regs)
+void irq_handler(registers_t *regs)
 {
     // Send an EOI (end of interrupt) signal to the PICs.
     // If this interrupt involved the slave.
-    if (regs.int_no >= 40)
+    if (regs->int_no >= 40)
     {
         // Send reset signal to slave.
         outb(0xA0, 0x20);
@@ -38,10 +37,9 @@ void irq_handler(registers_t regs)
     // Send reset signal to master. (As well as slave, if necessary).
     outb(0x20, 0x20);
 
-    if (interrupt_handlers[regs.int_no] != 0)
+    if (interrupt_handlers[regs->int_no] != 0)
     {
-        isr_t handler = interrupt_handlers[regs.int_no];
-        handler(regs);
+        interrupt_handlers[regs->int_no](regs);
     }
 
 }
