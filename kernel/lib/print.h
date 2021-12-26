@@ -19,4 +19,9 @@ void print_int(s32int n);
 // sets the foreground and background colors
 void set_fore_back_colour(u8int x, u8int y);
 
+// set the cursor back 
+void print_backspace();
+
+
+
 #endif // PRINT

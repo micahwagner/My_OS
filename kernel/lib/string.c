@@ -37,8 +37,8 @@ s8int *strcpy(s8int *dest, const s8int *src) {
 // the end of dest, and return dest.
 
 s8int *strcat(s8int *dest, const s8int *src) {
-	strcpy(dest + strlen(dest), src);
-  	return dest;
+    strcpy(dest + strlen(dest), src);
+    return dest;
 }
 
 // return the length of string
@@ -77,6 +77,13 @@ void int_to_ascii(s32int n, s8int str[]) {
     //reverse string
     reverse(str);
 }
+
+void backspace(s8int s[]) {
+    int len = strlen(s);
+    s[len - 1] = 0; 
+}
+
+
 
 void reverse(s8int s[]) {
     s32int c, i, j;

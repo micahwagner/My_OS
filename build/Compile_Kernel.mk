@@ -1,7 +1,8 @@
 MODULES = Object/kernel_entry.asm.o Object/kernel.o \
 		Object/io.asm.o Object/print.o \
 		Object/mem.o Object/string.o \
-		Object/interrupt.asm.o Object/isr.o Object/idt.o Object/timer.o
+		Object/interrupt.asm.o Object/isr.o Object/idt.o Object/timer.o \
+		Object/keyboard.o
 
 INCLUDES = .././kernel
 
@@ -36,6 +37,9 @@ Object/isr.o: .././kernel/interrupts/isr.c
 
 Object/timer.o: .././kernel/interrupts/timer.c
 	i686-elf-gcc -I $(INCLUDES) .././kernel/interrupts $(FLAGS) -c $^ -o $@
+
+Object/keyboard.o: .././kernel/driver/keyboard.c
+	i686-elf-gcc -I $(INCLUDES) .././kernel/driver $(FLAGS) -c $^ -o $@
 
 
 

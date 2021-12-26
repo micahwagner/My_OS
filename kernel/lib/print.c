@@ -9,6 +9,8 @@ u8int cursor_y = 0;
 u8int backColour = 0;
 u8int foreColour = 14;
 
+
+
 // Updates the hardware cursor.
 static void move_cursor()
 {
@@ -146,6 +148,16 @@ void set_fore_back_colour(u8int x, u8int y) {
 
     //get rid of the 8th bit because that describes the blinking attribute
     backColour = y & 0x07;
+}
+
+void print_backspace() {
+    u16int *location;
+    u8int  attributeByte = (backColour << 4) | (foreColour & 0x0F);
+    location = video_memory + (cursor_y*80 + cursor_x-1);
+    *location = 0x20 | (attributeByte << 8);
+
+    cursor_x -= 1;
+    move_cursor();
 }
 
 
