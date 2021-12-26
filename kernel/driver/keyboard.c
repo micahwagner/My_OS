@@ -50,23 +50,61 @@ static void user_input(char *input) {
         print_str("LIST OF COMMANDS (case sensitive):\n");
     	set_fore_back_colour(2,0);
         print_str("CLEAR\n");
-        print_str("PRINT\n");
+        print_str("PRINT");
+    	set_fore_back_colour(13,0); 
+        print_str(" (argument)\n");
+    	set_fore_back_colour(2,0);
         print_str("HALT\n");
         print_str("SYSINFO\n");
-        print_str("SETCOLOR\n");
+        print_str("SHOWTIMER\n");
+        print_str("SETCOLOR");
+    	set_fore_back_colour(13,0); 
+        print_str(" (argument) (argument)\n");
+    	set_fore_back_colour(2,0);
     	set_fore_back_colour(14,0);
-        print_str("\nCMD: ");
+        print_str("\nCMD:");
     } 
     else if (strcmp(input, "CLEAR") == 0) {
     	clear_screen();
     	print_str("CMD:");
+    }
+    else if (strcmp(input, "SYSINFO") == 0) {
+    	print_str("\nPaging: ");
+    	set_fore_back_colour(2,0);
+    	print_str("Disabled");
+    	set_fore_back_colour(14,0);
+    	print_str("\nRing: ");
+    	set_fore_back_colour(2,0);
+    	print_str("0");
+    	set_fore_back_colour(14,0);
+    	print_str("\n32-bit: ");
+		set_fore_back_colour(2,0);
+    	print_str("True");
+    	set_fore_back_colour(14,0);
+    	print_str("\nMemory: ");
+    	set_fore_back_colour(2,0);
+    	print_str("4GB");
+    	set_fore_back_colour(14,0);
+    	print_str("\nTimerFreq: ");
+    	set_fore_back_colour(2,0);
+    	print_str("50");
+    	set_fore_back_colour(14,0);
+    	print_str("\nInterrupts: ");
+    	set_fore_back_colour(2,0);
+    	print_str("Enabled\n");
+    	set_fore_back_colour(14,0);
+    	print_str("\nCMD:");
+    }
+     else if (strcmp(input, "SHOWTIMER") == 0) {
+     	print_int(timer_value());
+     	print_str("\nCMD:");
     }
     else {
     	print_str("Invalid Command: ");
     	set_fore_back_colour(4,0);
     	print_str(input);
     	set_fore_back_colour(14,0);
-    	print_str("\nCMD: ");
+    	print_str("\nCMD:");
     }
 }
 

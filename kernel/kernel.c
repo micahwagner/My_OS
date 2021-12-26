@@ -17,6 +17,7 @@ void kernel_main()
 	// initialize interrupts
 	asm volatile("sti");
 	init_interrupts();
+	init_timer(50);
 	init_keyboard();
 
     //asm volatile("sti");

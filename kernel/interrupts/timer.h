@@ -5,5 +5,6 @@
 #include "isr.h"
 
 void init_timer(u32int frequency);
+u32int timer_value();
 
 #endif
