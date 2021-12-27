@@ -6,6 +6,7 @@ Below is a list of prerequisite knowledge needed before building a 32-bit x86 op
 
 - [https://www.youtube.com/watch?v=LnzuMJLZRdU&list=PLowKtXNTBypFbtuVMUVXNR0z1mu7dp7eH] - this link leads to a playlist created by ben eater. In this series, Ben Eater creates a 6502 computer system. The reason I recommend this is because it gives a great base understanndding of how the cpu interacts with the rest of the components (ram, rom, io, etc..).
 - [https://8bitworkshop.com/v3.8.0/?platform=vcs&file=examples%2Fhello.a] - This link leads to an online IDE that allows you to code in 6502 assembly for an atari, and many other old computer systems. This is a great source for learning how to code in assembly.
+- [https://skilldrick.github.io/easy6502/] - this link helped me understand 6502 assembly. it goes through all the basics of 6502 assembly. highly recommend for learning 6502 assembly.
 - [https://www.youtube.com/watch?v=ojHSzW3zVNU&list=PLZlHzKk21aImqCiV71iE2I1dUE5LNejQk] - This link isn't necessary, but it gives a great understanding of how cpu's work internally. 
 - [https://www.cs.virginia.edu/~evans/cs216/guides/x86.html] - great source for learning x86 assembly
 - Lastly, learning C is necessary to program an operating system. I suggest watching some youtube tutorials on C.
@@ -31,7 +32,9 @@ Below is a list of prerequisite knowledge needed before building a 32-bit x86 op
 - [https://www.ryanstan.com/assmToC.html] - helped me understand how to switch from assembly to c
 - [https://docs.oracle.com/cd/E19683-01/817-3677/chapter6-46512/index.html] good source for understanding the ELF standard
 #### technical guides:
-- [http://www.jamesmolloy.co.uk/tutorial_html/] - great source for getting the kernel set up (lib, interrupts, paging, etc...)
+- [http://www.jamesmolloy.co.uk/tutorial_html/] - great source for getting the kernel set up (lib, interrupts, and IRQs). There are a few problems with this tutorial (especially when it comes to paging, the heap, multitasking, and switching to usermode), so I suggest looking at how other people set up the kernel.
+- [https://wiki.osdev.org/James_Molloy%27s_Tutorial_Known_Bugs] - this explains what the jamesmolloy tutorial does wrong. I highly suggest you read it if you use jamesmolloys tutorial.
+- [https://littleosbook.github.io/] - this is a really good source for the technical details behind a 32 bit x86 kernel. This also has a bunch of other links to reference.
 - [http://www.osdever.net/bkerndev/index.php] - great source for the technical details behind a 32 bit x86 kernel.
 #### operating systems to reverse engineer:
 - https://github.com/cfenollosa/os-tutorial

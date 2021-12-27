@@ -69,7 +69,7 @@ static void user_input(char *input) {
     	print_str("CMD:");
     }
     else if (strcmp(input, "SYSINFO") == 0) {
-    	print_str("\nPaging: ");
+    	print_str("Paging: ");
     	set_fore_back_colour(2,0);
     	print_str("Disabled");
     	set_fore_back_colour(14,0);
