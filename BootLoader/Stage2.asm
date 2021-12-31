@@ -44,6 +44,10 @@ PrintDone:
 ;Set up GDT	(Global Descriptor Table)				
 ;=======================================
 
+; this GDT is refered to as a flat memory model. 
+; we basically just set up the gdt because pmode requirse the gdt to be set up.
+; later we switch to paging.
+
 GDTData:
 	dq		0
 
