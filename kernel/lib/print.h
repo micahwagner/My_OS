@@ -16,6 +16,9 @@ void print_str(s8int *c);
 // print an integer out to the screen
 void print_int(s32int n);
 
+// print hex value to screen
+void print_hex(s32int n);
+
 // sets the foreground and background colors
 void set_fore_back_colour(u8int x, u8int y);
 

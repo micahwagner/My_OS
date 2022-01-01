@@ -1,6 +1,7 @@
 #include "lib/lib.h"
 #include "interrupts/idt.h"
 #include "driver/keyboard.h"
+#include "memory/paging.h"
 
 void kernel_main()
 {
@@ -15,12 +16,20 @@ void kernel_main()
     print_str("\n================================================================================");
     print_str("\nCMD:");
 	// initialize interrupts
-	asm volatile("sti");
 	init_interrupts();
+
+	// initialize paging
+	initialise_paging();
+
+	// init interrupt requests and drivers
+	asm volatile("sti");
 	init_timer(50);
 	init_keyboard();
 
-    //asm volatile("sti");
-    //init_timer(50);
+	// do a page fault
+	u32int *ptr = (u32int*)0xA0000000;
+    u32int do_page_fault = *ptr;
+
+
     return;
 }

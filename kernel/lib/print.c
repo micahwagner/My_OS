@@ -167,3 +167,10 @@ void print_int(s32int n) {
     int_to_ascii(n, str);
     print_str(str);
 }
+
+// print an integer out to the screen
+void print_hex(s32int n) {
+    s8int str[32];
+    hex_to_ascii(n, str);
+    print_str(str);
+}

@@ -13,14 +13,14 @@ void register_interrupt_handler(u8int n, isr_t handler)
 // the argument for this function has already been set in the stack in interrupt.asm
 void isr_handler(registers_t *regs)
 {	
-	print_str("\n");
-	print_str("\n");
-    print_str("recieved interrupt: ");
-    print_int(regs->int_no);
-
     if (interrupt_handlers[regs->int_no] != 0)
     {
 		interrupt_handlers[regs->int_no](regs);
+    } else {
+    	print_str("\n");
+		print_str("\n");
+    	print_str("unhandled interrupt: ");
+    	print_int(regs->int_no);
     }
 }
 
