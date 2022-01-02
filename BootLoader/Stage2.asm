@@ -310,15 +310,45 @@ LoadKernel:
 ;Gets info from stage 1 (rootregion, dataregion)
 ;=======================================
 GetStage1Info:
-	push 	ds 								
-	mov 	ax, 0x07c0						; where stage 1 is in RAM
-	mov 	ds, ax 							; set ds to where stage 1 is
+;	push 	ds 								
+;	mov 	ax, 0x07c0						; where stage 1 is in RAM
+;	mov 	ds, ax 							; set ds to where stage 1 is
+;
+;	mov 	ax, WORD [ds:ROOTLOC] 			; store where root region is from RAM
+;	mov 	bx, WORD [ds:DATAREGLOC] 		; store where data region is from disc
+;	pop 	ds
+;	mov 	WORD [rootregion], ax
+;	mov 	WORD [dataregion], bx
 
-	mov 	ax, WORD [ds:ROOTLOC] 			; store where root region is from RAM
-	mov 	bx, WORD [ds:DATAREGLOC] 		; store where data region is from disc
-	pop 	ds
-	mov 	WORD [rootregion], ax
-	mov 	WORD [dataregion], bx
+LoadFatRoot:
+
+	; get size of FAT and store in cx
+
+	xor 	ax, ax
+	mov 	al, BYTE [bpbNumberOfFATs]
+	mul 	WORD [bpbSectorsPerFAT]
+	mov 	cx, ax
+
+	; get starting location of Root Entry in RAM
+
+	mul 	WORD [bpbBytesPerSector] 		; mul FAT sector size to get bytes
+	add 	ax, FATROOTLOC 					; add with where we are loaded into
+	mov 	WORD [rootregion], ax 			; store for later
+
+	; calculate size of root directory and add with FAT and reserved sectors 
+	; store in cx
+
+	xor 	dx, dx 							; prepare dx for div
+	mov 	ax, 0x0020						; use the value 32 to multiplay with the amount of root entries
+	mul 	WORD [bpbRootEntries]			; because each root entry is 32 bytes long
+	div 	WORD [bpbBytesPerSector]		; devide by bytes per sector so we get how many sectors the root directory is
+	add 	cx, ax                      	; add size of FAT with size of root
+	mov 	ax, WORD [bpbReservedSectors] 	; set ax to starting location of FAT
+	mov 	WORD [dataregion], cx 			; store to get the start of data region
+	add 	WORD [dataregion], ax 			; account for reserved sectors
+
+	mov 	bx, FATROOTLOC
+	call 	LoadSectors	
 
 ;=======================================
 ;finds a file's location from the root, and returns starting cluster
@@ -326,28 +356,22 @@ GetStage1Info:
 
 FindFileLocation:
 	mov 	cx, WORD [bpbRootEntries] 	; counter
-	mov 	si, WORD [rootregion] 		; location where root resides in RAM (after FAT)
+	mov 	di, WORD [rootregion] 		; location where root resides in RAM (after FAT)
 
 RootLoop:
 	push 	cx
 	mov 	cx, 0x000B 					; Character name is 11 bytes 
-	mov 	di, ImageName 				; name to find
-	push 	ds 	
-	mov 	ax, 0x07c0					; where stage 1 is in RAM
-	mov 	ds, ax 						; set ds to where Root and fat were loaded is
-	push 	si 							; push si because it gets incremented from rep cmpsb 
+	mov 	si, ImageName 				; name to find
+	push 	di 							; push di because it gets incremented from rep cmpsb 
 	rep cmpsb 							; compare DS:SI and ES:DI by subtraction. rep repeats cmpsb cx times (11)
-	pop 	si
-	je 		ReturnCluster				; if equal, jump to load fat
-	pop 	ds 							; set back to correct segment
+	pop 	di
 	pop 	cx
-	add 	si, 0x0020 					; add 32 bytes for next entry
+	je 		ReturnCluster				; if equal, jump to load fat
+	add 	di, 0x0020 					; add 32 bytes for next entry
 	loop 	RootLoop 					; decs cx (512 entrys) reg and checks for 0, if 0, execute next line
 	jmp 	FindFailed
 ReturnCluster:
-	mov 	dx, WORD [si + 0x001A] 		; starting cluster
-	pop 	ds 							; set back to correct segment
-	pop 	cx
+	mov 	dx, WORD [di + 0x001A] 		; starting cluster
 	mov 	WORD [cluster], dx
 	push 	0x3000 						; where to write the file
 	jmp 	LoadFile
@@ -372,7 +396,6 @@ LoadFile:
 	xor     cx, cx
 	mov     cl, BYTE [bpbSectorsPerCluster]     ; sectors to read
 	call    LoadSectors
-
 	push    bx
 
 	mov 	ax, WORD [cluster] 			; copy currrent cluster because we need different valuse from it
@@ -380,20 +403,11 @@ LoadFile:
 	mov 	dx, ax
 	shr 	dx, 0x0001 	 				; math to get correct FAT index						 
 	add 	cx, dx								
-	mov 	bx, 0x0200
+	mov 	bx, FATROOTLOC
 
 	add 	bx, cx 						; index into FAT
 
-	push 	ds 	
-	push 	ax
-
-	mov 	ax, 0x07c0					; where FAT is in RAM
-	mov 	ds, ax	
-
-	pop 	ax
-
-	mov 	dx, WORD [ds:bx] 			; read two bytes from FAT
-	pop 	ds
+	mov 	dx, WORD [bx] 				; read two bytes from FAT
 	add 	WORD [KernelSize], 1
 	test 	ax, 0x0001					; AND to test if Odd	
 	jnz 	OddCluster
@@ -622,6 +636,9 @@ bsExtBootSignature: 	DB 0x29
 bsSerialNumber:	        DD 0xa0a1a2a3
 bsVolumeLabel: 	        DB "DOS FLOPPY "
 bsFileSystem: 	        DB "FAT12   "
+
+
+FATROOTLOC: 			DB 0x00
 
 
 

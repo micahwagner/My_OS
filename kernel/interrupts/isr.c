@@ -18,7 +18,6 @@ void isr_handler(registers_t *regs)
 		interrupt_handlers[regs->int_no](regs);
     } else {
     	print_str("\n");
-		print_str("\n");
     	print_str("unhandled interrupt: ");
     	print_int(regs->int_no);
     }
