@@ -1,7 +1,5 @@
 ; not limited to 512 bytes
 
-%define 	ROOTLOC 0x192 					; offset into stage 1
-%define 	DATAREGLOC 0x194 				; ^	
 %define 	CODE_DESC 0x08
 %define 	DATA_DESC 0x10
 %define 	IMAGE_RMODE_BASE 0x3000
@@ -305,20 +303,6 @@ A20Enabled:
 ;=======================================
 
 LoadKernel:
-
-;=======================================
-;Gets info from stage 1 (rootregion, dataregion)
-;=======================================
-GetStage1Info:
-;	push 	ds 								
-;	mov 	ax, 0x07c0						; where stage 1 is in RAM
-;	mov 	ds, ax 							; set ds to where stage 1 is
-;
-;	mov 	ax, WORD [ds:ROOTLOC] 			; store where root region is from RAM
-;	mov 	bx, WORD [ds:DATAREGLOC] 		; store where data region is from disc
-;	pop 	ds
-;	mov 	WORD [rootregion], ax
-;	mov 	WORD [dataregion], bx
 
 LoadFatRoot:
 

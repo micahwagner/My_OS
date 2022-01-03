@@ -104,6 +104,7 @@ static void user_input(char *input) {
     	set_fore_back_colour(4,0);
     	print_str(input);
     	set_fore_back_colour(14,0);
+        print_str("\n");
     	print_str("\nCMD:");
     }
 }

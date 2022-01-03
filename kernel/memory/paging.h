@@ -27,7 +27,7 @@ typedef struct page_directory
     page_table_t *tables[1024];
 
     //Array of pointers to the pagetables above, but gives their *physical*
-    //location, for loading into the CR3 register.
+    //location, for loading into the CR3 register. this is the PDE
     u32int tablesPhysical[1024];
 
 
