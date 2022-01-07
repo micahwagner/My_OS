@@ -53,6 +53,6 @@ void switch_page_directory(page_directory_t *new);
 //reside isn't created, create it
 page_t *get_page(u32int address, int make, page_directory_t *dir);
 
-static void page_fault(registers_t *regs);
+void page_fault(registers_t *regs);
 
 #endif

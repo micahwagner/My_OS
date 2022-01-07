@@ -12,7 +12,7 @@ void kernel_main()
 
     // Write out a sample string
     print_str("                                   - MIDOS -");
-    print_str("\n                                 4GB AVAILABLE");
+    print_str("\n                             Type HELP for more info");
     print_str("\n================================================================================");
     print_str("\nCMD:");
 	// initialize interrupts
@@ -35,3 +35,4 @@ void kernel_main()
 
     return;
 }
+

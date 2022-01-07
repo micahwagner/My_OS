@@ -97,7 +97,7 @@ static void user_input(char *input) {
     }
      else if (strcmp(input, "SHOWTIMER") == 0) {
      	print_int(timer_value());
-     	print_str("\nCMD:");
+     	print_str("\n\nCMD:");
     }
     else {
     	print_str("Invalid Command: ");
