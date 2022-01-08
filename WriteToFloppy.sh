@@ -14,3 +14,6 @@ then
 else
 	exit
 fi
+#sudo diskutil unmount "diskname"
+#sudo dd if=bin/Stage1.bin of="disklocation" conv=notrunc;
+#
