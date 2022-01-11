@@ -60,6 +60,11 @@ static void init_idt()
 
     mem_set(&idt_entries, 0, sizeof(idt_entry_t)*256);
 
+    unsigned char a1, a2;
+ 
+    a1 = inb(PICM_DATA);                        // save masks
+    a2 = inb(PICS_DATA);
+
     // remap PIC IRQ's
 
     // (ICW1) Starts initialize sequence, specifying to expect ICW4 and start in 
@@ -78,9 +83,8 @@ static void init_idt()
     outb(PICM_DATA, ICW4_8086);
     outb(PICS_DATA, ICW4_8086);
 
-    // allow all IRQ's on master and slave PIC
-    outb(PICM_DATA, 0x0);
-    outb(PICS_DATA, 0x0);
+    outb(PICM_DATA, a1);   // restore saved masks.
+    outb(PICS_DATA, a2);
 
 
     idt_set_gate( 0, (u32int)isr0 , 0x08, 0x8E);

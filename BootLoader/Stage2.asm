@@ -6,12 +6,13 @@
 %define 	IMAGE_PMODE_BASE 0x100000
 
  
-org 0x500									; we are loaded at linear address 0x500
+org 0x0500									; we are loaded at linear address 0x500
  
 bits 	16									; we are still in real mode
  
 ; 0x500 is not used by anything else so we arent over writing important data
-	
+
+
 jmp 	main								; jump to main
 
 
@@ -524,13 +525,18 @@ main:
 	call 	Print
 
 	call 	InstallGDT 						; instal GDT into GDTR
+	mov 	si, GDTInstalled
+	call 	Print
 	call 	HandleA20 						; enable A20 Gate
+	mov 	si, A20IsEnabled
+	call 	Print
 	call 	LoadKernel  					; loads kernel from disc into mem location 0x3000
 
 	cli 									; disbale interupts (do not enable because we cant use interrupts when in pmode)
 	mov 	eax, cr0						; set cr0 first bit to 1 so we can "go into pmode"
 	or 		eax, 1
 	mov 	cr0, eax 
+
 
 
 
@@ -575,7 +581,6 @@ CopyKernelImage:
    	rep 	movsd 							; loads a doubleword from ds:si to es:di, repeated cx times (128)
 
 JumpToKernel:
-
     jmp 	CODE_DESC:IMAGE_PMODE_BASE
 
 
@@ -592,9 +597,11 @@ dataregion  dw 0x0000
 cluster     dw 0x0000
 KernelSize 	dw 0x0000
 
-LoadMsg db	"Preparing to load operating system...",13,10,0
+LoadMsg db	0x0D, 0x0A, "Preparing to load operating system...",13,10,0
 TestMsg db "testing", 0
 A20FailedMsg db "The A20 gate failed to open", 0
+A20IsEnabled db "A20 enabled",13,10,0
+GDTInstalled db "GDT installed",13,10,0
 msgProgress db ".", 0
 ImageName db "MIDOS   SYS",0
 FindFailure db "failed to find Kernel",0

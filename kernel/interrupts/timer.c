@@ -5,6 +5,7 @@ u32int tick = 0;
 static void timer_callback(registers_t *regs)
 {
     tick++;
+    print_int(tick);
 }
 
 u32int timer_value() {

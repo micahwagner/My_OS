@@ -208,7 +208,6 @@ LoadFatRoot:
 ;browse root entry for binary image
 ;=======================================
 
-
 		mov 	cx, WORD [bpbRootEntries] 	; counter
 		mov 	di, WORD [rootregion] 		; location where root resides in RAM (after FAT)
 	RootLoop:
@@ -218,8 +217,8 @@ LoadFatRoot:
 		push 	di 							; push di because it gets incremented from rep cmpsb 
 	rep cmpsb 								; compare DS:SI and ES:DI by subtraction. rep repeats cmpsb cx times (11)
 		pop 	di
-		pop 	cx
 		je 		LoadFile 					; if equal, jump to load fat
+		pop 	cx
 		add 	di, 0x0020 					; add 32 bytes for next entry
 		loop 	RootLoop 					; decs cx reg and checks for 0, if 0, execute next line
 		jmp 	Failure
@@ -232,15 +231,11 @@ LoadFile:
  	
 	; di has start of root entry we want, add26 to get the 26th part of entry (starting cluster)
 
-	mov 	si, msgCRLF
-	call 	Print	
+
 	mov 	dx, WORD [di + 0x001A] 			; starting cluster
 	mov 	WORD [cluster], dx
 
 	; set destination for Stage2 to 0050:0000
-
-	mov 	si, msgCRLF
-	call 	Print
 	mov 	ax, 0x0050
 	mov 	es, ax
 	mov 	bx, 0x0000
@@ -297,7 +292,7 @@ LoadStage2:
 
  	DONE:
      
-		mov     si, msgCRLF
+		mov     si, msgJumping
 		call    Print
 		push    WORD 0x0050
 		push    WORD 0x0000
@@ -324,10 +319,11 @@ LoadStage2:
 	ImageName   db "STAGE2  SYS"
 
 	msgLoading  db 0x0D, 0x0A, "Loading Boot Image ", 0x0D, 0x0A, 0x00	
+	msgJumping  db 0x0D, 0x0A, "Jumping to STAGE2", 0x0D, 0x0A, 0x00	
 	msgProgress db ".", 0x00
 	msgCRLF     db 0x0D, 0x0A, 0x00		
 	msgFailure  db 0x0D, 0x0A, "ERROR : Press Any Key to Reboot", 0x0A, 0x00
-	msgTest  db 0x0D, 0x0A, "0", 0x0A, 0x00
+	msgTest  db 0x0D, 0x0A, "TEST", 0x0A, 0x00
 				
 
 times 510 - ($-$$) db 0						; we have to be 512 bytes. add the rest of the bytes to be 0
