@@ -60,11 +60,11 @@ static void init_idt()
 
     mem_set(&idt_entries, 0, sizeof(idt_entry_t)*256);
 
-    unsigned char a1, a2;
+    u8int a1, a2;
  
     a1 = inb(PICM_DATA);                        // save masks
     a2 = inb(PICS_DATA);
-
+    
     // remap PIC IRQ's
 
     // (ICW1) Starts initialize sequence, specifying to expect ICW4 and start in 
