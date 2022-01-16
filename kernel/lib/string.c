@@ -78,44 +78,7 @@ void int_to_ascii(s32int n, s8int str[]) {
     reverse(str);
 }
 
-void hex_to_ascii(u32int n, s8int str[]) {
-    s32int tmp;
 
-    char noZeroes = 1;
-
-    int j;
-    int i;
-    for (i = 28; i > 0; i -= 4)
-    {
-        tmp = (n >> i) & 0xF;
-        if (tmp == 0 && noZeroes != 0)
-        {
-            continue;
-        }
-    
-        if (tmp >= 0xA)
-        {
-            noZeroes = 0;
-            str[j] = tmp-0xA+'a';
-        }
-        else
-        {
-            noZeroes = 0;
-            str[j] = tmp+'0';
-        }
-        j++;
-    }
-
-    tmp = n & 0xF;
-    if (tmp >= 0xA)
-    {
-        str[j] = tmp-0xA+'a';
-    }
-    else
-    {
-        str[j] = tmp+'0';
-    }
-}
 
 void backspace(s8int s[]) {
     int len = strlen(s);

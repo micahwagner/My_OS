@@ -92,14 +92,15 @@ void free_frame(page_t *page) {
 void initialise_paging() {
     // The size of physical memory. For the moment we 
     // assume it is 16MB big.
+
     u32int mem_end_page = 0x1000000;
     nframes = mem_end_page / 0x1000;
     frames = (u32int*)kmalloc(INDEX_FROM_BIT(nframes));
+
     mem_set(frames, 0, INDEX_FROM_BIT(nframes));
     
     // Let's make a page directory.
     kernel_directory = (page_directory_t*)kmalloc_a(sizeof(page_directory_t));
-    print_hex(kernel_directory);
     current_directory = kernel_directory;
 
     // We need to identity map (phys addr = virt addr) from
@@ -127,7 +128,7 @@ void switch_page_directory(page_directory_t *dir) {
     asm volatile("mov %0, %%cr3":: "r"(&dir->tablesPhysical));
     u32int cr0;
     asm volatile("mov %%cr0, %0": "=r"(cr0));
-    cr0 |= 0x80000000; // Enable paging!
+    cr0 |= 0x80000000; // Enable paging
     asm volatile("mov %0, %%cr0":: "r"(cr0));
 }
 
@@ -149,6 +150,8 @@ page_t *get_page(u32int address, int make, page_directory_t *dir) {
         return 0;
     }
 }
+
+
 
 void page_fault(registers_t *regs) {
     // A page fault has occurred.

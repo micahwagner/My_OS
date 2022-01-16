@@ -15,13 +15,14 @@ void kernel_main()
     print_str("\n                             Type HELP for more info");
     print_str("\n================================================================================");
     print_str("\nCMD:");
+
+
 	// initialize interrupts
 	init_interrupts();
 
 
 	// initialize paging
 	initialise_paging();
-
 
 	// init interrupt requests and drivers
 	asm volatile ("sti");
