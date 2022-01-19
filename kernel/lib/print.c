@@ -160,6 +160,12 @@ void print_backspace() {
     move_cursor();
 }
 
+// print hex out to the screen
+void print_hex(s32int n) {
+    s8int str[32];
+    hex_to_ascii(n, str);
+    print_str(str);
+}
 
 // print an integer out to the screen
 void print_int(s32int n) {
@@ -168,42 +174,3 @@ void print_int(s32int n) {
     print_str(str);
 }
 
-// print hex out to the screen
-void print_hex(s32int n) {
-    s32int tmp;
-
-    print_str("0x");
-
-    char noZeroes = 1;
-
-    int i;
-    for (i = 28; i > 0; i -= 4)
-    {
-        tmp = (n >> i) & 0xF;
-        if (tmp == 0 && noZeroes != 0)
-        {
-            continue;
-        }
-    
-        if (tmp >= 0xA)
-        {
-            noZeroes = 0;
-            print_char(tmp-0xA+'a' );
-        }
-        else
-        {
-            noZeroes = 0;
-            print_char( tmp+'0' );
-        }
-    }
-  
-    tmp = n & 0xF;
-    if (tmp >= 0xA)
-    {
-        print_char(tmp-0xA+'a');
-    }
-    else
-    {
-        print_char(tmp+'0');
-    }
-}
