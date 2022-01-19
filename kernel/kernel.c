@@ -28,13 +28,7 @@ void kernel_main()
 	asm volatile ("sti");
 	init_timer(10);
 	init_keyboard();
-	print_hex(0xde3f67);
-	print_hex(0xde3f67);
-	print_hex(0xde3f67);
-	print_hex(0xde3f67);
-	print_hex(0xdf3faa);
-	print_hex(0xde3f67);
-	print_hex(0xde3f67);
+
 
 
 
