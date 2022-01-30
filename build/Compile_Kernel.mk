@@ -5,7 +5,7 @@ MODULES = Object/kernel_entry.asm.o Object/kernel.o \
 		Object/keyboard.o \
 		Object/paging.o Object/memory.o
 
-INCLUDES = .././kernel
+INCLUDES = .././kernel/includes
 
 FLAGS := -O0 -Wall -g -ffreestanding \
 	-nostartfiles -nodefaultlibs \
@@ -22,29 +22,29 @@ Object/kernel.o: .././kernel/kernel.c
 	i686-elf-gcc -I $(INCLUDES) $(FLAGS) -c .././kernel/kernel.c -o Object/kernel.o
 
 Object/print.o: .././kernel/lib/print.c
-	i686-elf-gcc -I $(INCLUDES) .././kernel/lib $(FLAGS) -c $^ -o $@
+	i686-elf-gcc -I $(INCLUDES) $(FLAGS) -c $^ -o $@
 
 Object/mem.o: .././kernel/lib/mem.c
-	i686-elf-gcc -I $(INCLUDES) .././kernel/lib $(FLAGS) -c $^ -o $@
+	i686-elf-gcc -I $(INCLUDES) $(FLAGS) -c $^ -o $@
 
 Object/string.o: .././kernel/lib/string.c
-	i686-elf-gcc -I $(INCLUDES) .././kernel/lib $(FLAGS) -c $^ -o $@
+	i686-elf-gcc -I $(INCLUDES) $(FLAGS) -c $^ -o $@
 
 Object/idt.o: .././kernel/interrupts/idt.c
-	i686-elf-gcc -I $(INCLUDES) .././kernel/interrupts $(FLAGS) -c $^ -o $@
+	i686-elf-gcc -I $(INCLUDES) $(FLAGS) -c $^ -o $@
 
 Object/isr.o: .././kernel/interrupts/isr.c
-	i686-elf-gcc -I $(INCLUDES) .././kernel/interrupts $(FLAGS) -c $^ -o $@
+	i686-elf-gcc -I $(INCLUDES) $(FLAGS) -c $^ -o $@
 
-Object/timer.o: .././kernel/interrupts/timer.c
-	i686-elf-gcc -I $(INCLUDES) .././kernel/interrupts $(FLAGS) -c $^ -o $@
+Object/timer.o: .././kernel/interrupts/timer.c 
+	i686-elf-gcc -I $(INCLUDES) $(FLAGS) -c $^ -o $@
 
-Object/keyboard.o: .././kernel/driver/keyboard.c
-	i686-elf-gcc -I $(INCLUDES) .././kernel/driver $(FLAGS) -c $^ -o $@
+Object/keyboard.o: .././kernel/driver/keyboard.c 
+	i686-elf-gcc -I $(INCLUDES) $(FLAGS) -c $^ -o $@
 
-Object/paging.o: .././kernel/memory/paging.c
-	i686-elf-gcc -I $(INCLUDES) .././kernel/memory $(FLAGS) -c $^ -o $@
+Object/paging.o: .././kernel/memory/paging.c 
+	i686-elf-gcc -I $(INCLUDES) $(FLAGS) -c $^ -o $@
 
 Object/memory.o: .././kernel/memory/memory.c
-	i686-elf-gcc -I $(INCLUDES) .././kernel/memory $(FLAGS) -c $^ -o $@
+	i686-elf-gcc -I $(INCLUDES) $(FLAGS) -c $^ -o $@
 

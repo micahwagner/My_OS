@@ -1,14 +1,13 @@
-#include "lib/lib.h"
-#include "interrupts/idt.h"
-#include "driver/keyboard.h"
-#include "memory/paging.h"
+#include "lib.h"
+#include "idt.h"
+#include "keyboard.h"
+#include "paging.h"
 
 void kernel_main()
 {
     // Initialise the screen (by clearing it)
     set_fore_back_colour(14,0);
     clear_screen();
-
 
 
     // Write out a sample string
@@ -32,10 +31,9 @@ void kernel_main()
 
 
 
-
-	// do a page fault
-	//u32int *ptr = (u32int*)0xA0000000;
-    //u32int do_page_fault = *ptr;
+	//do a page fault
+	// u32int *ptr = (u32int*)0xA0000000;
+ 	//u32int do_page_fault = *ptr;
 
     return;
 }

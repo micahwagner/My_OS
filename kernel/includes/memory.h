@@ -1,7 +1,7 @@
 #ifndef MEMORY_H
 #define MEMORY_H
 
-#include ".././lib/lib.h"
+#include "lib.h"
 
 /**
    Allocate a chunk of memory, sz in size. If align == 1,

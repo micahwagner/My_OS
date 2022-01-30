@@ -1,8 +1,8 @@
 #ifndef ISR_H
 #define ISR_H
 
-#include ".././lib/lib.h"
-#include ".././io/io.h"
+#include "lib.h"
+#include "io.h"
 
 
 #define IRQ0 32

@@ -1,8 +1,8 @@
 #ifndef IDT_H
 #define IDT_H
 
-#include ".././lib/lib.h"
-#include ".././io/io.h"
+#include "lib.h"
+#include "io.h"
 #include "isr.h"
 
 void init_interrupts();
