@@ -10,6 +10,7 @@ void kernel_main()
     clear_screen();
 
 
+
     // Write out a sample string
     print_str("                                   - MIDOS -");
     print_str("\n                             Type HELP for more info");
@@ -27,6 +28,9 @@ void kernel_main()
 	asm volatile ("sti");
 	init_timer(10);
 	init_keyboard();
+
+
+
 
 
 

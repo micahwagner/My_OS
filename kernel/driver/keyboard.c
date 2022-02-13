@@ -20,7 +20,7 @@ const char sc_ascii[] = { '?', '?', '1', '2', '3', '4', '5', '6',
         'H', 'J', 'K', 'L', ';', '\'', '`', '?', '\\', 'Z', 'X', 'C', 'V', 
         'B', 'N', 'M', ',', '.', '/', '?', '?', '?', ' '};
 
-static void keyboard_callback(registers_t *regs) {
+void keyboard_callback(registers_t *regs) {
     /* The PIC leaves us the scancode in port 0x60 */
     u8int scancode = inb(0x60);
 
@@ -41,7 +41,7 @@ static void keyboard_callback(registers_t *regs) {
     }
 }
 
-static void user_input(char *input) {
+void user_input(char *input) {
 	if (strcmp(input, "HALT") == 0) {
         print_str("Halting system\n");
         asm volatile("hlt");
