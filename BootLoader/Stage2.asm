@@ -17,7 +17,7 @@ jmp 	main								; jump to main
 
 
 ;=======================================
-;LIB (common functions)			
+;LIB (common functions for boot loader)			
 ;=======================================
  
 ;---------------------------------------
@@ -43,9 +43,13 @@ PrintDone:
 ;Set up GDT	(Global Descriptor Table)				
 ;=======================================
 
-; this GDT is refered to as a flat memory model. 
-; we basically just set up the gdt because pmode requirse the gdt to be set up.
-; later we switch to paging.
+; The GDT marks portions of the memory as readable/writeable/executable. 
+;GDT tells the CPU which parts of the block can have particular permissions, so for all the requests that fall in the address range specified, those permissions must be respected. 
+; the GDT does not provide a way to actually manage those portions.
+; I will later use paging to actually manage manage those portions of memory
+; this GDT is refered to as a flat memory model. Since I intend to not actually use segmentation, I will instead have a flat 32bit address space for both the kernel and user programs and rely on paging instead (as most systems do), I will just create dummy segments in it, spanning the whole address space (base 0, limit 0xffffffff).
+; we need to set up the gdt because pmode requirse the gdt to be set up.
+
 
 GDTData:
 	dq		0
@@ -573,7 +577,7 @@ CopyKernelImage:
 	movzx 	ebx, WORD [bpbBytesPerSector] 
 	mul 	ebx
 	mov 	ebx, 4
-	div 	ebx 							; devide by 4 because we load 4 bytes
+	div 	ebx 							; divide by 4 because we load 4 bytes
 	cld
    	mov     esi, IMAGE_RMODE_BASE
    	mov		edi, IMAGE_PMODE_BASE

@@ -37,7 +37,7 @@ of the bytes are written to the data IO address (0x21 and 0xA1).
 
 // Lets us access our ASM functions from our C code.
 extern void idt_flush(u32int);
-extern isr_t interrupt_handlers[];
+extern isr_t interrupt_handlers[256];
 
 
 // Internal function prototypes.
@@ -49,23 +49,23 @@ idt_ptr_t   idt_ptr;
 
 void init_interrupts() {
 	init_idt();
-    mem_set(&interrupt_handlers, 0, sizeof(isr_t)*256);
+    mem_set((unsigned char *)interrupt_handlers, 0, sizeof(isr_t)*256);
 
 }
 
 void init_idt()
 {
     idt_ptr.limit = sizeof(idt_entry_t) * 256 - 1;
-    idt_ptr.base  = (u32int)&idt_entries;
+    idt_ptr.base  = (u32int)idt_entries;
 
-    mem_set(&idt_entries, 0, sizeof(idt_entry_t)*256);
+    mem_set((unsigned char *)idt_entries, 0, sizeof(idt_entry_t)*256);
 
     u8int a1, a2;
  
     a1 = inb(PICM_DATA);                        // save masks
     a2 = inb(PICS_DATA);
     
-    // remap PIC IRQ's
+    // remap PIC IRQ's (this should be in another script to makes things more organized)
 
     // (ICW1) Starts initialize sequence, specifying to expect ICW4 and start in 
     outb(PICM_COMMAND, ICW1_INIT | ICW1_ICW4);

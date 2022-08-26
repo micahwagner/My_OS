@@ -3,6 +3,7 @@
 #include "keyboard.h"
 #include "paging.h"
 
+
 void kernel_main()
 {
     // Initialise the screen (by clearing it)
@@ -10,8 +11,8 @@ void kernel_main()
     clear_screen();
 
 
-
     // Write out a sample string
+
     print_str("                                   - MIDOS -");
     print_str("\n                             Type HELP for more info");
     print_str("\n================================================================================");
@@ -34,10 +35,9 @@ void kernel_main()
 
 
 
-
 	//do a page fault
-	// u32int *ptr = (u32int*)0xA0000000;
- // 	u32int do_page_fault = *ptr;
+	//u32int *ptr = (u32int*)0xA0000000;
+ 	//u32int do_page_fault = *ptr;
 
     return;
 }

@@ -94,7 +94,7 @@ isr_common_stub:
     mov ax, ds               ; Lower 16-bits of eax = ds.
     push eax                 ; save the data segment descriptor
 
-    mov ax, 0x10  ; load the kernel data segment descriptor in case that we do an inerrupt when we are in user mode
+    ;mov ax, 0x10  ; load the kernel data segment descriptor in case that we do an inerrupt when we are in user mode
     mov ds, ax
     mov es, ax
     mov fs, ax
