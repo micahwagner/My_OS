@@ -2,6 +2,8 @@
 
 u32int tick = 0;
 
+
+//(this script should be in drivers folder)
 void timer_callback(registers_t *regs)
 {
     tick++;

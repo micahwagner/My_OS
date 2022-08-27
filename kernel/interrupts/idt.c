@@ -7,6 +7,11 @@
 #define PICS_COMMAND	PICS
 #define PICS_DATA	(PICS+1)
 
+
+// interrupt gates disable interrupts when they are running there handlers, trap gates don't do that
+#define _32INT_GATE 0x8E  // p=1, DPL=00, reserved 0, 0xE: 32-bit Interrupt Gate, 1000 1110
+#define KERNEL_CODE_SEG 0x08 //0x08 is the kernel code selector in our GDT
+
 /* existing IRQ's (interrupt requests from external devices such as a keyboard)
 are mapped to interrupt numbers 0x8 - 0xf. these mappings conflict with the
 mappings our CPU has. To fix this, we need to remap the PIC (programmable interrupt controller).
@@ -65,7 +70,7 @@ void init_idt()
     a1 = inb(PICM_DATA);                        // save masks
     a2 = inb(PICS_DATA);
     
-    // remap PIC IRQ's (this should be in another script to makes things more organized)
+    // remap PIC IRQ's (this should be in another script (in drivers) to makes things more organized)
 
     // (ICW1) Starts initialize sequence, specifying to expect ICW4 and start in 
     outb(PICM_COMMAND, ICW1_INIT | ICW1_ICW4);
@@ -87,54 +92,54 @@ void init_idt()
     outb(PICS_DATA, a2);
 
 
-    idt_set_gate( 0, (u32int)isr0 , 0x08, 0x8E);
-    idt_set_gate( 1, (u32int)isr1 , 0x08, 0x8E);
-    idt_set_gate( 2, (u32int)isr2 , 0x08, 0x8E);
-    idt_set_gate( 3, (u32int)isr3 , 0x08, 0x8E);
-    idt_set_gate( 4, (u32int)isr4 , 0x08, 0x8E);
-    idt_set_gate( 5, (u32int)isr5 , 0x08, 0x8E);
-    idt_set_gate( 6, (u32int)isr6 , 0x08, 0x8E);
-    idt_set_gate( 7, (u32int)isr7 , 0x08, 0x8E);
-    idt_set_gate( 8, (u32int)isr8 , 0x08, 0x8E);
-    idt_set_gate( 9, (u32int)isr9 , 0x08, 0x8E);
-    idt_set_gate(10, (u32int)isr10, 0x08, 0x8E);
-    idt_set_gate(11, (u32int)isr11, 0x08, 0x8E);
-    idt_set_gate(12, (u32int)isr12, 0x08, 0x8E);
-    idt_set_gate(13, (u32int)isr13, 0x08, 0x8E);
-    idt_set_gate(14, (u32int)isr14, 0x08, 0x8E);
-    idt_set_gate(15, (u32int)isr15, 0x08, 0x8E);
-    idt_set_gate(16, (u32int)isr16, 0x08, 0x8E);
-    idt_set_gate(17, (u32int)isr17, 0x08, 0x8E);
-    idt_set_gate(18, (u32int)isr18, 0x08, 0x8E);
-    idt_set_gate(19, (u32int)isr19, 0x08, 0x8E);
-    idt_set_gate(20, (u32int)isr20, 0x08, 0x8E);
-    idt_set_gate(21, (u32int)isr21, 0x08, 0x8E);
-    idt_set_gate(22, (u32int)isr22, 0x08, 0x8E);
-    idt_set_gate(23, (u32int)isr23, 0x08, 0x8E);
-    idt_set_gate(24, (u32int)isr24, 0x08, 0x8E);
-    idt_set_gate(25, (u32int)isr25, 0x08, 0x8E);
-    idt_set_gate(26, (u32int)isr26, 0x08, 0x8E);
-    idt_set_gate(27, (u32int)isr27, 0x08, 0x8E);
-    idt_set_gate(28, (u32int)isr28, 0x08, 0x8E);
-    idt_set_gate(29, (u32int)isr29, 0x08, 0x8E);
-    idt_set_gate(30, (u32int)isr30, 0x08, 0x8E);
-    idt_set_gate(31, (u32int)isr31, 0x08, 0x8E);
-    idt_set_gate(32, (u32int)irq0 , 0x08, 0x8E);
-    idt_set_gate(33, (u32int)irq1 , 0x08, 0x8E);
-    idt_set_gate(34, (u32int)irq2 , 0x08, 0x8E);
-    idt_set_gate(35, (u32int)irq3 , 0x08, 0x8E);
-    idt_set_gate(36, (u32int)irq4 , 0x08, 0x8E);
-    idt_set_gate(37, (u32int)irq5 , 0x08, 0x8E);
-    idt_set_gate(38, (u32int)irq6 , 0x08, 0x8E);
-    idt_set_gate(39, (u32int)irq7 , 0x08, 0x8E);
-    idt_set_gate(40, (u32int)irq8 , 0x08, 0x8E);
-    idt_set_gate(41, (u32int)irq9 , 0x08, 0x8E);
-    idt_set_gate(42, (u32int)irq10, 0x08, 0x8E);
-    idt_set_gate(43, (u32int)irq11, 0x08, 0x8E);
-    idt_set_gate(44, (u32int)irq12, 0x08, 0x8E);
-    idt_set_gate(45, (u32int)irq13, 0x08, 0x8E);
-    idt_set_gate(46, (u32int)irq14, 0x08, 0x8E);
-    idt_set_gate(47, (u32int)irq15, 0x08, 0x8E);
+    idt_set_gate( 0, (u32int)isr0 , KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate( 1, (u32int)isr1 , KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate( 2, (u32int)isr2 , KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate( 3, (u32int)isr3 , KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate( 4, (u32int)isr4 , KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate( 5, (u32int)isr5 , KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate( 6, (u32int)isr6 , KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate( 7, (u32int)isr7 , KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate( 8, (u32int)isr8 , KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate( 9, (u32int)isr9 , KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(10, (u32int)isr10, KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(11, (u32int)isr11, KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(12, (u32int)isr12, KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(13, (u32int)isr13, KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(14, (u32int)isr14, KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(15, (u32int)isr15, KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(16, (u32int)isr16, KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(17, (u32int)isr17, KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(18, (u32int)isr18, KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(19, (u32int)isr19, KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(20, (u32int)isr20, KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(21, (u32int)isr21, KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(22, (u32int)isr22, KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(23, (u32int)isr23, KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(24, (u32int)isr24, KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(25, (u32int)isr25, KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(26, (u32int)isr26, KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(27, (u32int)isr27, KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(28, (u32int)isr28, KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(29, (u32int)isr29, KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(30, (u32int)isr30, KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(31, (u32int)isr31, KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(32, (u32int)irq0 , KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(33, (u32int)irq1 , KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(34, (u32int)irq2 , KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(35, (u32int)irq3 , KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(36, (u32int)irq4 , KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(37, (u32int)irq5 , KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(38, (u32int)irq6 , KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(39, (u32int)irq7 , KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(40, (u32int)irq8 , KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(41, (u32int)irq9 , KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(42, (u32int)irq10, KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(43, (u32int)irq11, KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(44, (u32int)irq12, KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(45, (u32int)irq13, KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(46, (u32int)irq14, KERNEL_CODE_SEG, _32INT_GATE);
+    idt_set_gate(47, (u32int)irq15, KERNEL_CODE_SEG, _32INT_GATE);
 
     idt_flush((u32int)&idt_ptr);
 }

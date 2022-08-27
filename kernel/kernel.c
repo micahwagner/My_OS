@@ -36,8 +36,8 @@ void kernel_main()
 
 
 	//do a page fault
-	//u32int *ptr = (u32int*)0xA0000000;
- 	//u32int do_page_fault = *ptr;
+	// u32int *ptr = (u32int*)0xA0000000;
+ // 	u32int do_page_fault = *ptr;
 
     return;
 }

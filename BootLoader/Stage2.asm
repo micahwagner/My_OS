@@ -60,7 +60,7 @@ GDTData:
 	dw		0 								; low 16 bits for base address
 	db 		0 								; middle byte for base address
 	db 		10011010b 						; access (see GDT for the break down)
-	db 		11001111b 						; granularity (see GDT for break down) and bits 16-19 of limit
+	db 		11001111b 						; granularity (4k pages, see GDT for break down) and bits 16-19 of limit
 	db 		0 								; high byte for base address
 
 ;start of GDT Data Segment
@@ -69,7 +69,7 @@ GDTData:
 	dw		0 								; low 16 bits for base address
 	db 		0 								; middle byte for base address
 	db 		10010010b 						; access (see GDT for the break down)
-	db 		11001111b 						; granularity (see GDT for break down) and bits 16-19 of limit
+	db 		11001111b 						; granularity (4k pages, see GDT for break down) and bits 16-19 of limit
 	db 		0 								; high byte for base address
 
 ;start of GDT User Code segment
@@ -78,7 +78,7 @@ GDTData:
 	dw		0 								; low 16 bits for base address
 	db 		0 								; middle byte for base address
 	db 		11111010b 						; access (see GDT for the break down)
-	db 		11001111b 						; granularity (see GDT for break down) and bits 16-19 of limit
+	db 		11001111b 						; granularity (4k pages, see GDT for break down) and bits 16-19 of limit
 	db 		0 								; high byte for base address
 
 ;start of GDT User Data Segment
@@ -87,7 +87,7 @@ GDTData:
 	dw		0 								; low 16 bits for base address
 	db 		0 								; middle byte for base address
 	db 		11110010b 						; access (see GDT for the break down)
-	db 		11001111b 						; granularity (see GDT for break down) and bits 16-19 of limit
+	db 		11001111b 						; granularity (4k pages, see GDT for break down) and bits 16-19 of limit
 	db 		0 								; high byte for base address
 
 GDTR:
