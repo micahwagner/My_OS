@@ -22,12 +22,13 @@
 #define IRQ14 46
 #define IRQ15 47
 
+//origin_esp is basically a useless value, see https://www.pagetable.com/?p=8
 typedef struct registers
 {
     u32int ds;                  // Data segment selector
-    u32int edi, esi, ebp, esp, ebx, edx, ecx, eax; // Pushed by pusha.
+    u32int edi, esi, ebp,  origin_esp, ebx, edx, ecx, eax; // Pushed by pusha. 
     u32int int_no, err_code;    // Interrupt number and error code (if applicable)
-    u32int eip, cs, eflags, useresp, ss; // Pushed by the processor automatically.
+    u32int eip, cs, eflags, esp, ss; // Pushed by the processor automatically.
 } registers_t;
 
 // Enables registration of callbacks for interrupts or IRQs.
