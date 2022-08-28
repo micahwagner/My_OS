@@ -4,6 +4,7 @@
 #include "lib.h"
 #include "io.h"
 #include "isr.h"
+#include "PIC.h"
 
 void init_interrupts();
 

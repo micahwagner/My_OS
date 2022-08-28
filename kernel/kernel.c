@@ -26,9 +26,9 @@ void kernel_main()
 	initialise_paging();
 
 	// init interrupt requests and drivers
-	asm volatile ("sti");
 	init_timer(10);
 	init_keyboard();
+	asm volatile ("sti");
 
 
 

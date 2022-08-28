@@ -1,4 +1,4 @@
-#include "timer.h"
+#include "PIT.h"
 
 u32int tick = 0;
 

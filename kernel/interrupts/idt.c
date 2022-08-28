@@ -1,44 +1,9 @@
 #include "idt.h"
 
-#define PICM		0x20		// IO base address for master PIC 
-#define PICS		0xA0		// IO base address for slave PIC 
-#define PICM_COMMAND	PICM
-#define PICM_DATA	(PICM+1)
-#define PICS_COMMAND	PICS
-#define PICS_DATA	(PICS+1)
-
-
 // interrupt gates disable interrupts when they are running there handlers, trap gates don't do that
 #define _32INT_GATE 0x8E  // p=1, DPL=00, reserved 0, 0xE: 32-bit Interrupt Gate, 1000 1110
 #define KERNEL_CODE_SEG 0x08 //0x08 is the kernel code selector in our GDT
 
-/* existing IRQ's (interrupt requests from external devices such as a keyboard)
-are mapped to interrupt numbers 0x8 - 0xf. these mappings conflict with the
-mappings our CPU has from the BIOS. To fix this, we need to remap the PIC (programmable interrupt controller).
-To reset the PIC, the PIC expects an ICW (intialize control word). The ICW is 4 bytes.
-The first byte (ICW1) must be written out to the command IO address (0x20 and 0xA0). The rest
-of the bytes are written to the data IO address (0x21 and 0xA1).
-*/
-
-//anything that isn't specified should always be 0
-
-#define ICW1_ICW4	0x01		// (1) ICW4 needed (0) not needed 
-#define ICW1_SINGLE	0x02		// (1)Single or (0)cascade mode 
-#define ICW1_INTERVAL4	0x04	// Call address interval (1)4 or (0)8 
-#define ICW1_LEVEL	0x08		// operation mode 
-#define ICW1_INIT	0x10		// Initialization - always 1
-
-#define ICW2_M	0x20			// Master PIC maps IRQ's to ints 32 - 39 (31 is the last cpu defined int)
-#define ICW2_S	0x28			// Slave PIC maps IRQ's to ints 40 - 47
-
-#define ICW3_M	0x04			// which of the Master PIC inputs are mapped to which slave PIC
-#define ICW3_S	0x02			// ID of slave PIC
- 
-#define ICW4_8086	0x01		// (1) 8086/88 or (0) MCS-80/85 mode 
-#define ICW4_AUTO	0x02		// (1) Auto or (0) normal EOI 
-#define ICW4_BUF_SLAVE	0x08	// Buffered mode/slave 
-#define ICW4_BUF_MASTER	0x0C	// Buffered mode/master 
-#define ICW4_SFNM	0x10		// Special fully nested 
 
 // Lets us access our ASM functions from our C code.
 extern void idt_flush(u32int);
@@ -65,32 +30,7 @@ void init_idt()
 
     mem_set((unsigned char *)idt_entries, 0, sizeof(idt_entry_t)*256);
 
-    u8int a1, a2;
- 
-    a1 = inb(PICM_DATA);                        // save masks
-    a2 = inb(PICS_DATA);
-    
-    // remap PIC IRQ's (this should be in another script (in drivers) to makes things more organized)
-
-    // (ICW1) Starts initialize sequence, specifying to expect ICW4 and start in 
-    outb(PICM_COMMAND, ICW1_INIT | ICW1_ICW4);
-    outb(PICS_COMMAND, ICW1_INIT | ICW1_ICW4);
-
-    // (ICW2) set IRQ's to int 32 - 47
-    outb(PICM_DATA, ICW2_M);
-    outb(PICS_DATA, ICW2_S);
-
-    // (ICW3) set Master PIC input to Slave with ID of 2
-    outb(PICM_DATA, ICW3_M);
-    outb(PICS_DATA, ICW3_S);
-
-    // (ICW4) set 8086 mode
-    outb(PICM_DATA, ICW4_8086);
-    outb(PICS_DATA, ICW4_8086);
-
-    outb(PICM_DATA, a1);   // restore saved masks.
-    outb(PICS_DATA, a2);
-
+    init_pic();
 
     idt_set_gate( 0, (u32int)isr0 , KERNEL_CODE_SEG, _32INT_GATE);
     idt_set_gate( 1, (u32int)isr1 , KERNEL_CODE_SEG, _32INT_GATE);

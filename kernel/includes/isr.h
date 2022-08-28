@@ -3,6 +3,7 @@
 
 #include "lib.h"
 #include "io.h"
+#include "PIC.h"
 
 
 #define IRQ0 32

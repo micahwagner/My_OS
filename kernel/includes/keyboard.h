@@ -3,7 +3,7 @@
 
 #include "lib.h"
 #include "isr.h"
-#include "timer.h"
+#include "PIT.h"
 #include "io.h"
 
 void init_keyboard();
