@@ -14,7 +14,7 @@
 
 /* existing IRQ's (interrupt requests from external devices such as a keyboard)
 are mapped to interrupt numbers 0x8 - 0xf. these mappings conflict with the
-mappings our CPU has. To fix this, we need to remap the PIC (programmable interrupt controller).
+mappings our CPU has from the BIOS. To fix this, we need to remap the PIC (programmable interrupt controller).
 To reset the PIC, the PIC expects an ICW (intialize control word). The ICW is 4 bytes.
 The first byte (ICW1) must be written out to the command IO address (0x20 and 0xA0). The rest
 of the bytes are written to the data IO address (0x21 and 0xA1).
