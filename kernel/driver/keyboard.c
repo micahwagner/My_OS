@@ -1,4 +1,6 @@
 #include "keyboard.h"
+//all this code is very ugly and bad, will be refined when I create an actual shell
+// this code is to just help me debug things, its not going to be the final shell
 
 #define BACKSPACE 0x0E
 #define ENTER 0x1C
@@ -22,7 +24,7 @@ const char sc_ascii[] = { '?', '?', '1', '2', '3', '4', '5', '6',
 
 void keyboard_callback(registers_t *regs) {
     /* The PIC leaves us the scancode in port 0x60 */
-    u8int scancode = inb(0x60);
+    uint8_t scancode = inb(0x60);
 
 
     if (scancode > SC_MAX) return;

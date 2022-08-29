@@ -12,29 +12,29 @@
    parameter representations are available in kmalloc, kmalloc_a,
    kmalloc_ap, kmalloc_p.
 **/
-u32int kmalloc_int(u32int sz, int align, u32int *phys);
+uint32_t kmalloc_int(uint32_t sz, int align, uint32_t *phys);
 
 /**
    Allocate a chunk of memory, sz in size. The chunk must be
    page aligned.
 **/
-u32int kmalloc_a(u32int sz);
+uint32_t kmalloc_a(uint32_t sz);
 
 /**
    Allocate a chunk of memory, sz in size. The physical address
-   is returned in phys. Phys MUST be a valid pointer to u32int!
+   is returned in phys. Phys MUST be a valid pointer to uint32_t!
 **/
-u32int kmalloc_p(u32int sz, u32int *phys);
+uint32_t kmalloc_p(uint32_t sz, uint32_t *phys);
 
 /**
    Allocate a chunk of memory, sz in size. The physical address 
    is returned in phys. It must be page-aligned.
 **/
-u32int kmalloc_ap(u32int sz, u32int *phys);
+uint32_t kmalloc_ap(uint32_t sz, uint32_t *phys);
 
 /**
    General allocation function.
 **/
-u32int kmalloc(u32int sz);
+uint32_t kmalloc(uint32_t sz);
 
 #endif 

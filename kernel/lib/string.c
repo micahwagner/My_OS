@@ -2,14 +2,14 @@
 
 // Compare two strings. Should return -1 if 
 // str1 < str2, 0 if they are equal or 1 otherwise.
-s32int strcmp(s8int *str1, s8int *str2) {
-    const u8int *s1 = (const u8int *) str1;
-  	const u8int *s2 = (const u8int *) str2;
-  	u8int c1, c2;
+int strcmp(char *str1, char *str2) {
+    const uint8_t *s1 = (const uint8_t *) str1;
+  	const uint8_t *s2 = (const uint8_t *) str2;
+  	uint8_t c1, c2;
 
   	do {
-  		c1 = (u8int) *s1++;
-  		c2 = (u8int) *s2++;
+  		c1 = (uint8_t) *s1++;
+  		c2 = (uint8_t) *s2++;
 
   		if(c1 == 0) {
   			return c1 - c2;
@@ -22,8 +22,8 @@ s32int strcmp(s8int *str1, s8int *str2) {
 
 // Copy the NULL-terminated string src into dest, and
 // return dest.
-s8int *strcpy(s8int *dest, const s8int *src) {
-	s8int *tmp = dest;
+char *strcpy(char *dest, const char *src) {
+	char *tmp = dest;
     while (*src != 0) {
         *tmp = *src;
         src++;
@@ -36,14 +36,14 @@ s8int *strcpy(s8int *dest, const s8int *src) {
 // Concatenate the NULL-terminated string src onto
 // the end of dest, and return dest.
 
-s8int *strcat(s8int *dest, const s8int *src) {
+char *strcat(char *dest, const char *src) {
     strcpy(dest + strlen(dest), src);
     return dest;
 }
 
 // return the length of string
-s32int strlen(const s8int *ptr) {
-    s32int i = 0;
+int strlen(const char *ptr) {
+    int i = 0;
     while(*ptr != 0) {
         i++;
         ptr++;
@@ -54,8 +54,8 @@ s32int strlen(const s8int *ptr) {
 
 
 //turns an integer into a string
-void int_to_ascii(s32int n, s8int str[]) {
-    s32int i, sign;
+void int_to_ascii(int n, char str[]) {
+    int i, sign;
 
     //check if n is negative. if so, make it positive.
     if ((sign = n) < 0) n = -n;
@@ -78,8 +78,8 @@ void int_to_ascii(s32int n, s8int str[]) {
     reverse(str);
 }
 
-void hex_to_ascii(s32int n, s8int str[]) {
-    s32int tmp;
+void hex_to_ascii(int n, char str[]) {
+    int tmp;
     char noZeroes = 1;
 
     int j = 0;
@@ -117,15 +117,15 @@ void hex_to_ascii(s32int n, s8int str[]) {
     }
 }
 
-void backspace(s8int s[]) {
+void backspace(char s[]) {
     int len = strlen(s);
     s[len - 1] = 0; 
 }
 
 
 
-void reverse(s8int s[]) {
-    s32int c, i, j;
+void reverse(char s[]) {
+    int c, i, j;
     for (i = 0, j = strlen(s)-1; i < j; i++, j--) {
         c = s[i];
         s[i] = s[j];

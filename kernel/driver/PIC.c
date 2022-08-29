@@ -15,7 +15,7 @@ for more info, check out http://www.brokenthorn.com/Resources/OSDevPic.html
 
 
 void init_pic() {
-	u8int a1, a2;
+	uint8_t a1, a2;
 
  	// save masks
     a1 = inb(PICM_DATA); 

@@ -9,7 +9,7 @@ INCLUDES = .././kernel/includes
 
 FLAGS := -O0 -Wall -g -ffreestanding \
 	-nostartfiles -nodefaultlibs \
-	-nostdlib -lgcc -fno-exceptions \
+	-lgcc -fno-exceptions \
 	-falign-jumps -falign-functions \
 	-falign-labels -falign-loops \
 	-fomit-frame-pointer -fno-builtin 

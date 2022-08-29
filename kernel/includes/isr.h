@@ -27,16 +27,16 @@
 // https://www.pagetable.com/?p=8, https://www.felixcloutier.com/x86/popa:popad.html, https://c9x.me/x86/html/file_module_x86_id_270.html
 typedef struct registers
 {
-    u32int ds;                  // Data segment selector pushed from IR stub
-    u32int edi, esi, ebp,  useless_esp, ebx, edx, ecx, eax; // Pushed by pusha in the IR stub
-    u32int int_no, err_code;    // Interrupt number and error code (if applicable)
-    u32int eip, cs, eflags, esp, ss; // Pushed by the processor automatically when interrupt happens
+    uint32_t ds;                  // Data segment selector pushed from IR stub
+    uint32_t edi, esi, ebp,  useless_esp, ebx, edx, ecx, eax; // Pushed by pusha in the IR stub
+    uint32_t int_no, err_code;    // Interrupt number and error code (if applicable)
+    uint32_t eip, cs, eflags, esp, ss; // Pushed by the processor automatically when interrupt happens
 } registers_t;
 
 // Enables registration of callbacks for interrupts or IRQs.
 // For IRQs, to ease confusion, use the #defines above as the
 // first parameter.
 typedef void (*isr_t)(registers_t*);
-void register_interrupt_handler(u8int n, isr_t handler);
+void register_interrupt_handler(uint8_t n, isr_t handler);
 
 #endif

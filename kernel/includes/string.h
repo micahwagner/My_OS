@@ -1,12 +1,12 @@
 #ifndef STRING_H
 #define STRING_H
 #include "type.h"
-s8int *strcpy(s8int *dest, const s8int *src);
-s32int strcmp(s8int *str1, s8int *str2);
-s8int *strcat(s8int *dest, const s8int *src);
-s32int strlen(const s8int *ptr);
-void int_to_ascii(s32int n, s8int str[]);
-void reverse(s8int s[]);
-void backspace(s8int s[]);
-void hex_to_ascii(s32int n, s8int str[]);
+char *strcpy(char *dest, const char *src);
+int strcmp(char *str1, char *str2);
+char *strcat(char *dest, const char *src);
+int strlen(const char *ptr);
+void int_to_ascii(int n, char str[]);
+void reverse(char s[]);
+void backspace(char s[]);
+void hex_to_ascii(int n, char str[]);
 #endif

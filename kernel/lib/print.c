@@ -1,13 +1,13 @@
 #include "print.h"
 
 // The VGA framebuffer starts at 0xB8000.
-u16int *video_memory = (u16int *)0xB8000;
+uint16_t *video_memory = (uint16_t *)0xB8000;
 // Stores the cursor position.
-u8int cursor_x = 0;
-u8int cursor_y = 0;
+uint8_t cursor_x = 0;
+uint8_t cursor_y = 0;
 
-u8int backColour = 0;
-u8int foreColour = 14;
+uint8_t backColour = 0;
+uint8_t foreColour = 14;
 
 
 
@@ -15,7 +15,7 @@ u8int foreColour = 14;
 static void move_cursor()
 {
     // The screen is 80 characters wide...
-    u16int cursorLocation = cursor_y * 80 + cursor_x;
+    uint16_t cursorLocation = cursor_y * 80 + cursor_x;
     outb(0x3D4, 14);                  // Tell the VGA board we are setting the high cursor byte.
     outb(0x3D5, cursorLocation >> 8); // Send the high cursor byte.
     outb(0x3D4, 15);                  // Tell the VGA board we are setting the low cursor byte.
@@ -27,8 +27,8 @@ static void scroll()
 {
 
     // Get a space character with the default colour attributes.
-    u8int attributeByte = (backColour << 4) | (foreColour & 0x0F);
-    u16int blank = 0x20 /* space */ | (attributeByte << 8);
+    uint8_t attributeByte = (backColour << 4) | (foreColour & 0x0F);
+    uint16_t blank = 0x20 /* space */ | (attributeByte << 8);
 
     // Row 25 is the end, this means we need to scroll up
     if(cursor_y >= 25)
@@ -53,16 +53,16 @@ static void scroll()
 }
 
 // Writes a single character out to the screen.
-void print_char(s8int c)
+void print_char(char c)
 {
 
     // The attribute byte is made up of two nibbles - the lower being the 
     // foreground colour, and the upper the background colour.
-    u8int  attributeByte = (backColour << 4) | (foreColour & 0x0F);
+    uint8_t  attributeByte = (backColour << 4) | (foreColour & 0x0F);
     // The attribute byte is the top 8 bits of the word we have to send to the
     // VGA board.
-    u16int attribute = attributeByte << 8;
-    u16int *location;
+    uint16_t attribute = attributeByte << 8;
+    uint16_t *location;
 
     // Handle a backspace, by moving the cursor back one space
     if (c == 0x08 && cursor_x)
@@ -116,8 +116,8 @@ void print_char(s8int c)
 void clear_screen()
 {
     // Make an attribute byte for the default colours
-    u8int attributeByte = (backColour << 4) | (foreColour & 0x0F);
-    u16int blank = 0x20 /* space */ | (attributeByte << 8);
+    uint8_t attributeByte = (backColour << 4) | (foreColour & 0x0F);
+    uint16_t blank = 0x20 /* space */ | (attributeByte << 8);
 
     int i;
     for (i = 0; i < 80*25; i++)
@@ -132,7 +132,7 @@ void clear_screen()
 }
 
 // Outputs a null-terminated ASCII string to the monitor.
-void print_str(s8int *c)
+void print_str(char *c)
 {
     int i = 0;
     while (c[i])
@@ -141,7 +141,7 @@ void print_str(s8int *c)
     }
 }
 
-void set_fore_back_colour(u8int x, u8int y) {
+void set_fore_back_colour(uint8_t x, uint8_t y) {
 
     //input value can't be greater than a nibble
     foreColour = x & 0x0f;
@@ -151,8 +151,8 @@ void set_fore_back_colour(u8int x, u8int y) {
 }
 
 void print_backspace() {
-    u16int *location;
-    u8int  attributeByte = (backColour << 4) | (foreColour & 0x0F);
+    uint16_t *location;
+    uint8_t  attributeByte = (backColour << 4) | (foreColour & 0x0F);
     location = video_memory + (cursor_y*80 + cursor_x-1);
     *location = 0x20 | (attributeByte << 8);
 
@@ -161,15 +161,15 @@ void print_backspace() {
 }
 
 // print hex out to the screen
-void print_hex(s32int n) {
-    s8int str[32];
+void print_hex(int n) {
+    char str[32];
     hex_to_ascii(n, str);
     print_str(str);
 }
 
 // print an integer out to the screen
-void print_int(s32int n) {
-    s8int str[32];
+void print_int(int n) {
+    char str[32];
     int_to_ascii(n, str);
     print_str(str);
 }

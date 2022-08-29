@@ -1,3 +1,6 @@
+#ifndef PIC_H
+#define PIC_H
+
 #include "type.h"
 #include "io.h"
 
@@ -32,3 +35,4 @@ void init_pic();
 #define ICW4_SFNM	0x10		// Special fully nested 
 
 #define EOI 0x20 				// signals PIC that interrupt has been handled 
+#endif
