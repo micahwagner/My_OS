@@ -3,7 +3,7 @@
 u32int tick = 0;
 
 
-//(this script should be in drivers folder)
+//for more info, see http://www.brokenthorn.com/Resources/OSDevPit.html
 void timer_callback(registers_t *regs)
 {
     tick++;
@@ -24,10 +24,10 @@ void init_timer(u32int frequency)
     // that the divisor must be small enough to fit into 16-bits.
     u32int divisor = 1193180 / frequency;
 
-    // Send the command byte.
-    outb(0x43, 0x36);
+    // Send the command byte. sets binary counting, mode 3 (square wave), Read or Load LSB first then MSB, Channel 0
+    outb(PIT_ICW, PIT_BIT_COUNT | PIT_MODE_3 | PIT_RL_LSB_MSB | PIT_COUNTER0);
 
-    // Divisor has to be sent byte-wise, so split here into upper/lower bytes.
+    // Send LSB of divisor first, then MSB of divisor
     u8int l = (u8int)(divisor & 0xFF);
     u8int h = (u8int)( (divisor>>8) & 0xFF );
 

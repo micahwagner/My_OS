@@ -5,7 +5,10 @@ are mapped to interrupt numbers 0x8 - 0xf. these mappings conflict with the
 mappings our CPU has from the BIOS. To fix this, we need to remap the PIC (programmable interrupt controller).
 To reset the PIC, the PIC expects an ICW (intialize control word). The ICW is 4 bytes.
 The first byte (ICW1) must be written out to the command IO address (0x20 and 0xA0). The rest
-of the bytes are written to the data IO address (0x21 and 0xA1).
+of the bytes are written to the data IO address (0x21 and 0xA1). see below for a more thorough explanation.
+
+for more info, check out http://www.brokenthorn.com/Resources/OSDevPic.html
+
 */
 
 
@@ -13,8 +16,9 @@ of the bytes are written to the data IO address (0x21 and 0xA1).
 
 void init_pic() {
 	u8int a1, a2;
- 
-    a1 = inb(PICM_DATA);                        // save masks
+
+ 	// save masks
+    a1 = inb(PICM_DATA); 
     a2 = inb(PICS_DATA);
     
     // remap PIC IRQ's 

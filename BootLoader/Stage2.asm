@@ -536,6 +536,7 @@ main:
 	call 	Print
 	call 	LoadKernel  					; loads kernel from disc into mem location 0x3000
 
+
 	cli 									; disbale interupts (do not enable because we cant use interrupts when in pmode)
 	mov 	eax, cr0						; set cr0 first bit to 1 so we can "go into pmode"
 	or 		eax, 1
