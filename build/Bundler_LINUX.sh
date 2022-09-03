@@ -1,10 +1,9 @@
-mkdir MiDOS
-hdiutil create -size 1440k -fs "MS-DOS FAT12" -layout NONE -srcfolder MiDOS -format UDRW -ov .././disks/a.dmg
-rm -r MiDOS
-var=$(hdiutil attach .././disks/a.dmg | awk -F'/Volumes/' '{print $2}')
-cd bin
-cp STAGE2.SYS "/Volumes/$var"
-cp MIDOS.SYS "/Volumes/$var"
-cd ../
-hdiutil eject "/Volumes/$var"
-dd if=bin/Stage1.bin of=.././disks/a.dmg conv=notrunc;
+sudo mkdir /media/floppy1/
+dd bs=512 count=2880 if=/dev/zero of=.././disks/imagefile.img 
+mkfs.msdos -r 512 .././disks/imagefile.img
+sudo mount -o loop .././disks/imagefile.img /media/floppy1/
+sudo cp bin/MIDOS.SYS /media/floppy1
+sudo cp bin/STAGE2.SYS /media/floppy1
+sudo umount /media/floppy1
+dd if=bin/Stage1.bin of=.././disks/imagefile.img conv=notrunc; 
+sudo rm -r /media/floppy1
