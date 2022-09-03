@@ -80,7 +80,7 @@ IRQ  15,    47
 ; In isr.c
 extern irq_handler
 extern isr_handler
-extern idt_flush
+global idt_flush
 
 ; This is our common ISR stub. It saves the processor state, sets
 ; up for kernel mode segments, calls the C-level fault handler,
