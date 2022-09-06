@@ -4,26 +4,26 @@
 // str1 < str2, 0 if they are equal or 1 otherwise.
 int strcmp(char *str1, char *str2) {
     const uint8_t *s1 = (const uint8_t *) str1;
-  	const uint8_t *s2 = (const uint8_t *) str2;
-  	uint8_t c1, c2;
+    const uint8_t *s2 = (const uint8_t *) str2;
+    uint8_t c1, c2;
 
-  	do {
-  		c1 = (uint8_t) *s1++;
-  		c2 = (uint8_t) *s2++;
+    do {
+        c1 = (uint8_t) *s1++;
+        c2 = (uint8_t) *s2++;
 
-  		if(c1 == 0) {
-  			return c1 - c2;
-  		}
+        if(c1 == 0) {
+            return c1 - c2;
+        }
 
-  	} while(c1 == c2);
+    } while(c1 == c2);
 
-  	return c1 - c2;
+    return c1 - c2;
 }
 
 // Copy the NULL-terminated string src into dest, and
 // return dest.
 char *strcpy(char *dest, const char *src) {
-	char *tmp = dest;
+    char *tmp = dest;
     while (*src != 0) {
         *tmp = *src;
         src++;
@@ -96,7 +96,7 @@ void hex_to_ascii(int n, char str[]) {
         if (tmp >= 0xA)
         {
             noZeroes = 0;
-            str[j] = tmp-0xA+'a';
+            str[j] = tmp-0xA+'A';
         }
         else
         {
@@ -109,7 +109,7 @@ void hex_to_ascii(int n, char str[]) {
     tmp = n & 0xF;
     if (tmp >= 0xA)
     {
-        str[j] = tmp-0xA+'a';
+        str[j] = tmp-0xA+'A';
     }
     else
     {
