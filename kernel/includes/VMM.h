@@ -66,6 +66,10 @@ void load_page_dir(uint32_t addr);
 
 uint32_t get_page_dir();
 
+void switch_page_dir(page_dir_t *dir);
+
+page_dir_t* get_current_dir();
+
 //sets attribute in page dir entry specified by attribute (ex, attribute = 1, present set to 1)
 void page_dir_entry_set(page_dir_entry_t *entry, uint32_t attribute);
 
@@ -96,6 +100,29 @@ uint32_t page_table_entry_get_fr(page_table_entry_t *entry);
 //tests attribute in page table entry specified by attribute
 uint8_t page_table_entry_test(page_table_entry_t *entry, uint32_t attribute);
 
+//flushes tlb cache entry specified by virt_addr
+void flush_tlb_entry(uint32_t virt_addr);
+
+//maps a physical frame of memory to a virtual address
+void map_page(uint32_t phy, uint32_t virt); 
+
+//allocates frame for given entry
+void alloc_page(page_table_entry_t *entry);
+
+//deallocates frame for given entry
+void dealloc_page(page_table_entry_t *entry);
+
+//clears page table spcified by table
+void clear_page_table(page_table_t *table); 
+
+//clears page dir spcified by dir
+void clear_page_dir(page_dir_t *dir); 
+
+// 
+page_table_entry_t* page_table_lookup_entry(page_table_t *table, uint32_t vit_addr);
+
+//
+page_dir_entry_t* page_dir_lookup_entry(page_dir_t *table, uint32_t vit_addr);
 
 
 
