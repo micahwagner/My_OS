@@ -118,10 +118,10 @@ void clear_page_table(page_table_t *table);
 //clears page dir spcified by dir
 void clear_page_dir(page_dir_t *dir); 
 
-// 
+//returns pointer to page table entry from specified page table
 page_table_entry_t* page_table_lookup_entry(page_table_t *table, uint32_t vit_addr);
 
-//
+//returns pointer to page dir entry from specified page directory
 page_dir_entry_t* page_dir_lookup_entry(page_dir_t *table, uint32_t vit_addr);
 
 
